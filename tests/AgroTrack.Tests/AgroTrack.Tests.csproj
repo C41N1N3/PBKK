@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <RootNamespace>AgroTrack.Tests</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector" Version="6.0.2" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+    <PackageReference Include="xunit" Version="2.9.2" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\src\AgroTrack\Enums\**\*.cs" Link="Linked\%(RecursiveDir)%(Filename)%(Extension)" />
+    <Compile Include="..\..\src\AgroTrack\Models\**\*.cs" Link="Linked\%(RecursiveDir)%(Filename)%(Extension)" />
+    <Compile Include="..\..\src\AgroTrack\DTOs\**\*.cs" Link="Linked\%(RecursiveDir)%(Filename)%(Extension)" />
+    <Compile Include="..\..\src\AgroTrack\Utilities\**\*.cs" Link="Linked\%(RecursiveDir)%(Filename)%(Extension)" />
+    <Compile Include="..\..\src\AgroTrack\Security\**\*.cs" Link="Linked\%(RecursiveDir)%(Filename)%(Extension)" />
+    <Compile Include="..\..\src\AgroTrack\Data\**\*.cs" Link="Linked\%(RecursiveDir)%(Filename)%(Extension)" />
+    <Compile Include="..\..\src\AgroTrack\ViewModels\ViewModelBase.cs" Link="Linked\ViewModels\ViewModelBase.cs" />
+    <Compile Include="..\..\src\AgroTrack\Repositories\Interfaces\**\*.cs" Link="Linked\%(RecursiveDir)%(Filename)%(Extension)" />
+    <Compile Include="..\..\src\AgroTrack\Repositories\Implementations\**\*.cs" Link="Linked\%(RecursiveDir)%(Filename)%(Extension)" />
+    <Compile Include="..\..\src\AgroTrack\Services\Interfaces\**\*.cs" Link="Linked\%(RecursiveDir)%(Filename)%(Extension)" />
+    <Compile Include="..\..\src\AgroTrack\Services\Implementations\**\*.cs" Exclude="..\..\src\AgroTrack\Services\Implementations\DialogService.cs;..\..\src\AgroTrack\Services\Implementations\ThemeService.cs" Link="Linked\%(RecursiveDir)%(Filename)%(Extension)" />
+  </ItemGroup>
+
+</Project>

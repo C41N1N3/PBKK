@@ -1,0 +1,541 @@
+<UserControl x:Class="AgroTrack.Views.MaterialView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:viewmodels="clr-namespace:AgroTrack.ViewModels"
+             mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance Type=viewmodels:MaterialViewModel}"
+             d:DesignHeight="850" d:DesignWidth="1150">
+
+    <Grid Margin="24">
+        <!-- Main Panel -->
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/> <!-- 0. Header & Action Buttons -->
+                <RowDefinition Height="Auto"/> <!-- 1. Tab Selector & Filters -->
+                <RowDefinition Height="*"/>    <!-- 2. Content & DataGrids -->
+                <RowDefinition Height="Auto"/> <!-- 3. Pagination Toolbar -->
+            </Grid.RowDefinitions>
+
+            <!-- 0. Header -->
+            <Grid Grid.Row="0" Margin="0,0,0,18">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="Bahan Pertanian &amp; Pengelolaan Stok" 
+                               FontSize="24" FontWeight="Bold" 
+                               Foreground="{DynamicResource BrushTextPrimary}"/>
+                    <TextBlock Text="Kelola persediaan benih, pupuk, pestisida, serta pencatatan pengurangan dan pengembalian stok otomatis." 
+                               FontSize="13" Margin="0,4,0,0"
+                               Foreground="{DynamicResource BrushTextSecondary}"/>
+                </StackPanel>
+
+                <!-- Actions -->
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button Style="{DynamicResource SecondaryButton}"
+                            Command="{Binding OpenRecordUsageCommand}"
+                            Padding="14,9" Margin="0,0,10,0">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="🧪" Margin="0,0,6,0"/>
+                            <TextBlock Text="Catat Pemakaian" FontWeight="SemiBold"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Style="{DynamicResource PrimaryButton}"
+                            Command="{Binding OpenCreateMaterialCommand}"
+                            Padding="16,9">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="＋" FontWeight="Bold" Margin="0,0,8,0" FontSize="14"/>
+                            <TextBlock Text="Tambah Bahan" FontWeight="SemiBold"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Grid>
+
+            <!-- 1. Tabs & Filters -->
+            <Border Grid.Row="1" 
+                    Background="{DynamicResource BrushCardBackground}"
+                    BorderBrush="{DynamicResource BrushBorder}"
+                    BorderThickness="1"
+                    CornerRadius="8"
+                    Padding="16"
+                    Margin="0,0,0,16">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Tab Buttons -->
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,14">
+                        <RadioButton Content="📦 Persediaan Bahan &amp; Stok" 
+                                     IsChecked="{Binding SelectedTabIndex, Converter={StaticResource IntToBoolConverter}, ConverterParameter=0}"
+                                     GroupName="MaterialViewTabs"
+                                     FontSize="13" FontWeight="SemiBold"
+                                     Margin="0,0,18,0"/>
+                        <RadioButton Content="📋 Riwayat Pemakaian Bahan" 
+                                     IsChecked="{Binding SelectedTabIndex, Converter={StaticResource IntToBoolConverter}, ConverterParameter=1}"
+                                     GroupName="MaterialViewTabs"
+                                     FontSize="13" FontWeight="SemiBold"/>
+                    </StackPanel>
+
+                    <!-- Filters Row -->
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2.5*"/>
+                            <ColumnDefinition Width="1.5*"/>
+                            <ColumnDefinition Width="1.2*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Search -->
+                        <StackPanel Grid.Column="0" Margin="0,0,12,0">
+                            <TextBlock Text="Pencarian" FontSize="11" FontWeight="SemiBold" 
+                                       Foreground="{DynamicResource BrushTextSecondary}" Margin="0,0,0,4"/>
+                            <TextBox Text="{Binding SearchTerm, UpdateSourceTrigger=PropertyChanged}"
+                                     Style="{DynamicResource InputTextBox}"
+                                     Tag="Cari nama atau kode bahan..."/>
+                        </StackPanel>
+
+                        <!-- Category -->
+                        <StackPanel Grid.Column="1" Margin="0,0,12,0">
+                            <TextBlock Text="Kategori Bahan" FontSize="11" FontWeight="SemiBold" 
+                                       Foreground="{DynamicResource BrushTextSecondary}" Margin="0,0,0,4"/>
+                            <ComboBox ItemsSource="{Binding MaterialCategories}"
+                                      SelectedItem="{Binding SelectedCategoryFilter}"
+                                      Style="{DynamicResource ModernComboBox}"/>
+                        </StackPanel>
+
+                        <!-- Low Stock Filter -->
+                        <StackPanel Grid.Column="2" VerticalAlignment="Bottom" Margin="0,0,12,6">
+                            <CheckBox Content="Hanya Stok Menipis (⚠️)"
+                                      IsChecked="{Binding IsLowStockFilter}"
+                                      FontWeight="SemiBold"/>
+                        </StackPanel>
+
+                        <!-- Filter Buttons -->
+                        <StackPanel Grid.Column="3" Orientation="Horizontal" VerticalAlignment="Bottom">
+                            <Button Style="{DynamicResource SecondaryButton}" 
+                                    Command="{Binding SearchCommand}"
+                                    ToolTip="Terapkan Filter"
+                                    Padding="12,8" Margin="0,0,8,0">
+                                <TextBlock Text="🔍 Filter" FontWeight="SemiBold"/>
+                            </Button>
+                            <Button Style="{DynamicResource SecondaryButton}" 
+                                    Command="{Binding ResetFilterCommand}"
+                                    ToolTip="Reset Filter"
+                                    Padding="12,8">
+                                <TextBlock Text="↺ Reset" FontWeight="SemiBold"/>
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </Border>
+
+            <!-- 2. Main Content & DataGrids -->
+            <Border Grid.Row="2"
+                    Background="{DynamicResource BrushCardBackground}"
+                    BorderBrush="{DynamicResource BrushBorder}"
+                    BorderThickness="1"
+                    CornerRadius="8"
+                    ClipToBounds="True">
+                <Grid>
+                    <!-- Loading State -->
+                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center"
+                                Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <ProgressBar IsIndeterminate="True" Width="200" Height="6" Margin="0,0,0,12"/>
+                        <TextBlock Text="Memuat persediaan bahan..." 
+                                   Foreground="{DynamicResource BrushTextSecondary}" 
+                                   HorizontalAlignment="Center"/>
+                    </StackPanel>
+
+                    <!-- TAB 0: Master Bahan DataGrid -->
+                    <DataGrid ItemsSource="{Binding Materials}"
+                              AutoGenerateColumns="False"
+                              IsReadOnly="True"
+                              CanUserAddRows="False"
+                              CanUserSortColumns="True"
+                              GridLinesVisibility="Horizontal"
+                              HeadersVisibility="Column"
+                              Background="Transparent"
+                              RowHeight="44"
+                              SelectionMode="Single"
+                              BorderThickness="0"
+                              Visibility="{Binding SelectedTabIndex, Converter={StaticResource IntToVisibilityConverter}, ConverterParameter=0}">
+                        <DataGrid.Columns>
+                            <!-- Kode Bahan -->
+                            <DataGridTextColumn Header="Kode Bahan" Binding="{Binding MaterialCode}" FontWeight="SemiBold" Width="120"/>
+
+                            <!-- Nama Bahan -->
+                            <DataGridTextColumn Header="Nama Bahan" Binding="{Binding MaterialName}" FontWeight="Bold" Width="200"/>
+
+                            <!-- Kategori -->
+                            <DataGridTextColumn Header="Kategori" Binding="{Binding CategoryDisplay}" Width="150"/>
+
+                            <!-- Stok Tersedia -->
+                            <DataGridTemplateColumn Header="Stok Tersedia" Width="140">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding StockDisplay}" FontWeight="Bold"
+                                                       Foreground="{DynamicResource BrushTextPrimary}"/>
+                                            <TextBlock Text=" ⚠️" Foreground="{DynamicResource BrushWarning}" FontWeight="Bold"
+                                                       Visibility="{Binding IsLowStock, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                       ToolTip="Stok berada pada atau di bawah batas minimum!"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <!-- Batas Minimum -->
+                            <DataGridTextColumn Header="Batas Minimum" Binding="{Binding MinimumStockDisplay}" Width="120"/>
+
+                            <!-- Harga Satuan -->
+                            <DataGridTextColumn Header="Harga Satuan" Binding="{Binding UnitPriceDisplay}" Width="150"/>
+
+                            <!-- Status -->
+                            <DataGridTextColumn Header="Status" Binding="{Binding StatusDisplay}" Width="100"/>
+
+                            <!-- Aksi -->
+                            <DataGridTemplateColumn Header="Aksi" Width="100">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Style="{DynamicResource SecondaryButton}"
+                                                Command="{Binding DataContext.OpenEditMaterialCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                CommandParameter="{Binding}"
+                                                Padding="8,4"
+                                                ToolTip="Ubah Bahan">
+                                            <TextBlock Text="✏️ Ubah" FontSize="11"/>
+                                        </Button>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <!-- TAB 1: Riwayat Pemakaian DataGrid -->
+                    <DataGrid ItemsSource="{Binding Usages}"
+                              AutoGenerateColumns="False"
+                              IsReadOnly="True"
+                              CanUserAddRows="False"
+                              CanUserSortColumns="True"
+                              GridLinesVisibility="Horizontal"
+                              HeadersVisibility="Column"
+                              Background="Transparent"
+                              RowHeight="44"
+                              SelectionMode="Single"
+                              BorderThickness="0"
+                              Visibility="{Binding SelectedTabIndex, Converter={StaticResource IntToVisibilityConverter}, ConverterParameter=1}">
+                        <DataGrid.Columns>
+                            <!-- Tanggal -->
+                            <DataGridTextColumn Header="Waktu Pemakaian" Binding="{Binding DateDisplay}" Width="150"/>
+
+                            <!-- Bahan -->
+                            <DataGridTemplateColumn Header="Bahan Pertanian" Width="180">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding MaterialName}" FontWeight="Bold"/>
+                                            <TextBlock Text="{Binding MaterialCode}" FontSize="11" Foreground="{DynamicResource BrushTextSecondary}"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <!-- Penanaman -->
+                            <DataGridTemplateColumn Header="Penanaman &amp; Aktivitas" Width="220">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding PlantingCode}" FontWeight="SemiBold" Foreground="{DynamicResource BrushPrimary}"/>
+                                            <TextBlock Text="{Binding ActivityDescription}" FontSize="11" Foreground="{DynamicResource BrushTextSecondary}" TextTrimming="CharacterEllipsis"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <!-- Jumlah Pemakaian -->
+                            <DataGridTextColumn Header="Jumlah Pemakaian" Binding="{Binding QuantityDisplay}" FontWeight="Bold" Width="140"/>
+
+                            <!-- Harga Saat Pemakaian -->
+                            <DataGridTextColumn Header="Harga Satuan" Binding="{Binding PriceAtUsageDisplay}" Width="140"/>
+
+                            <!-- Subtotal Biaya -->
+                            <DataGridTextColumn Header="Subtotal Biaya" Binding="{Binding SubtotalDisplay}" FontWeight="Bold" Width="140"/>
+
+                            <!-- Dicatat Oleh -->
+                            <DataGridTextColumn Header="Petugas" Binding="{Binding CreatedByName}" Width="130"/>
+
+                            <!-- Aksi Batal -->
+                            <DataGridTemplateColumn Header="Aksi" Width="120">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Style="{DynamicResource DangerButton}"
+                                                Command="{Binding DataContext.CancelUsageTransactionCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                CommandParameter="{Binding}"
+                                                Padding="8,4"
+                                                ToolTip="Batalkan pemakaian &amp; kembalikan stok">
+                                            <TextBlock Text="↺ Batalkan" FontSize="11"/>
+                                        </Button>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </Border>
+
+            <!-- 3. Pagination Toolbar -->
+            <Grid Grid.Row="3" Margin="0,12,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="Menampilkan " Foreground="{DynamicResource BrushTextSecondary}"/>
+                    <TextBlock Text="{Binding TotalItems}" FontWeight="Bold" Foreground="{DynamicResource BrushTextPrimary}"/>
+                    <TextBlock Text=" item data (Halaman " Foreground="{DynamicResource BrushTextSecondary}"/>
+                    <TextBlock Text="{Binding CurrentPage}" FontWeight="Bold" Foreground="{DynamicResource BrushTextPrimary}"/>
+                    <TextBlock Text=" dari " Foreground="{DynamicResource BrushTextSecondary}"/>
+                    <TextBlock Text="{Binding TotalPages}" FontWeight="Bold" Foreground="{DynamicResource BrushTextPrimary}"/>
+                    <TextBlock Text=")" Foreground="{DynamicResource BrushTextSecondary}"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <Button Style="{DynamicResource SecondaryButton}"
+                            Command="{Binding PreviousPageCommand}"
+                            Padding="12,6" Margin="0,0,8,0">
+                        <TextBlock Text="◀ Sebelumnya"/>
+                    </Button>
+                    <Button Style="{DynamicResource SecondaryButton}"
+                            Command="{Binding NextPageCommand}"
+                            Padding="12,6">
+                        <TextBlock Text="Berikutnya ▶"/>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Grid>
+
+        <!-- 4. Material Form Modal (Overlay) -->
+        <Grid Visibility="{Binding IsMaterialFormOpen, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Border Background="#80000000"/>
+
+            <Border Background="{DynamicResource BrushCardBackground}"
+                    BorderBrush="{DynamicResource BrushBorder}"
+                    BorderThickness="1"
+                    CornerRadius="12"
+                    Width="520"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    Padding="28"
+                    Effect="{DynamicResource ShadowMedium}">
+                <StackPanel>
+                    <Grid Margin="0,0,0,20">
+                        <TextBlock Text="{Binding MaterialFormTitle}" 
+                                   FontSize="18" FontWeight="Bold" 
+                                   Foreground="{DynamicResource BrushTextPrimary}"/>
+                        <Button Style="{DynamicResource SecondaryButton}"
+                                Command="{Binding CancelMaterialCommand}"
+                                HorizontalAlignment="Right"
+                                Padding="8,2" Content="✕"/>
+                    </Grid>
+
+                    <!-- Kode & Nama -->
+                    <Grid Margin="0,0,0,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="14"/>
+                            <ColumnDefinition Width="2*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="Kode Bahan *" FontSize="12" FontWeight="SemiBold" 
+                                       Foreground="{DynamicResource BrushTextSecondary}" Margin="0,0,0,4"/>
+                            <TextBox Text="{Binding FormMaterialCode, UpdateSourceTrigger=PropertyChanged}"
+                                     Style="{DynamicResource InputTextBox}"
+                                     IsEnabled="{Binding IsEditingMaterial, Converter={StaticResource InverseBooleanConverter}}"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="2">
+                            <TextBlock Text="Nama Bahan *" FontSize="12" FontWeight="SemiBold" 
+                                       Foreground="{DynamicResource BrushTextSecondary}" Margin="0,0,0,4"/>
+                            <TextBox Text="{Binding FormMaterialName, UpdateSourceTrigger=PropertyChanged}"
+                                     Style="{DynamicResource InputTextBox}"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- Kategori & Satuan -->
+                    <Grid Margin="0,0,0,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="14"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="Kategori *" FontSize="12" FontWeight="SemiBold" 
+                                       Foreground="{DynamicResource BrushTextSecondary}" Margin="0,0,0,4"/>
+                            <ComboBox ItemsSource="{Binding MaterialCategories}"
+                                      SelectedItem="{Binding FormCategory}"
+                                      Style="{DynamicResource ModernComboBox}"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="2">
+                            <TextBlock Text="Satuan Kemasan *" FontSize="12" FontWeight="SemiBold" 
+                                       Foreground="{DynamicResource BrushTextSecondary}" Margin="0,0,0,4"/>
+                            <TextBox Text="{Binding FormUnit, UpdateSourceTrigger=PropertyChanged}"
+                                     Style="{DynamicResource InputTextBox}"
+                                     Tag="kg, liter, sak, botol..."/>
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- Stok & Batas Minimum -->
+                    <Grid Margin="0,0,0,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="14"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="Stok Tersedia *" FontSize="12" FontWeight="SemiBold" 
+                                       Foreground="{DynamicResource BrushTextSecondary}" Margin="0,0,0,4"/>
+                            <TextBox Text="{Binding FormStock, UpdateSourceTrigger=PropertyChanged}"
+                                     Style="{DynamicResource InputTextBox}"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="2">
+                            <TextBlock Text="Batas Minimum *" FontSize="12" FontWeight="SemiBold" 
+                                       Foreground="{DynamicResource BrushTextSecondary}" Margin="0,0,0,4"/>
+                            <TextBox Text="{Binding FormMinimumStock, UpdateSourceTrigger=PropertyChanged}"
+                                     Style="{DynamicResource InputTextBox}"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- Harga Satuan -->
+                    <TextBlock Text="Harga Satuan (Rp) *" FontSize="12" FontWeight="SemiBold" 
+                               Foreground="{DynamicResource BrushTextSecondary}" Margin="0,0,0,4"/>
+                    <TextBox Text="{Binding FormUnitPrice, UpdateSourceTrigger=PropertyChanged}"
+                             Style="{DynamicResource InputTextBox}"
+                             Margin="0,0,0,24"/>
+
+                    <!-- Action Buttons -->
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button Style="{DynamicResource SecondaryButton}"
+                                Command="{Binding CancelMaterialCommand}"
+                                Content="Batal"
+                                Padding="16,8" Margin="0,0,10,0"/>
+                        <Button Style="{DynamicResource PrimaryButton}"
+                                Command="{Binding SaveMaterialCommand}"
+                                Content="Simpan Bahan"
+                                Padding="20,8"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </Grid>
+
+        <!-- 5. Usage Form Modal (Overlay) -->
+        <Grid Visibility="{Binding IsUsageFormOpen, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Border Background="#80000000"/>
+
+            <Border Background="{DynamicResource BrushCardBackground}"
+                    BorderBrush="{DynamicResource BrushBorder}"
+                    BorderThickness="1"
+                    CornerRadius="12"
+                    Width="520"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    Padding="28"
+                    Effect="{DynamicResource ShadowMedium}">
+                <StackPanel>
+                    <Grid Margin="0,0,0,20">
+                        <TextBlock Text="Catat Penggunaan Bahan" 
+                                   FontSize="18" FontWeight="Bold" 
+                                   Foreground="{DynamicResource BrushTextPrimary}"/>
+                        <Button Style="{DynamicResource SecondaryButton}"
+                                Command="{Binding CancelUsageCommand}"
+                                HorizontalAlignment="Right"
+                                Padding="8,2" Content="✕"/>
+                    </Grid>
+
+                    <!-- Aktivitas Lapangan -->
+                    <TextBlock Text="Aktivitas Lapangan Terkait *" FontSize="12" FontWeight="SemiBold" 
+                               Foreground="{DynamicResource BrushTextSecondary}" Margin="0,0,0,4"/>
+                    <ComboBox ItemsSource="{Binding Activities}"
+                              SelectedValue="{Binding FormUsageActivityId}"
+                              SelectedValuePath="ActivityId"
+                              DisplayMemberPath="Description"
+                              Style="{DynamicResource ModernComboBox}"
+                              Margin="0,0,0,12"/>
+
+                    <!-- Bahan Pertanian -->
+                    <TextBlock Text="Bahan yang Digunakan *" FontSize="12" FontWeight="SemiBold" 
+                               Foreground="{DynamicResource BrushTextSecondary}" Margin="0,0,0,4"/>
+                    <ComboBox ItemsSource="{Binding Materials}"
+                              SelectedValue="{Binding FormUsageMaterialId}"
+                              SelectedValuePath="MaterialId"
+                              DisplayMemberPath="MaterialName"
+                              Style="{DynamicResource ModernComboBox}"
+                              Margin="0,0,0,12"/>
+
+                    <!-- Jumlah Pemakaian & Harga -->
+                    <Grid Margin="0,0,0,14">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="14"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="Jumlah Dipakai *" FontSize="12" FontWeight="SemiBold" 
+                                       Foreground="{DynamicResource BrushTextSecondary}" Margin="0,0,0,4"/>
+                            <TextBox Text="{Binding FormUsageQuantity, UpdateSourceTrigger=PropertyChanged}"
+                                     Style="{DynamicResource InputTextBox}"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="2">
+                            <TextBlock Text="Harga Satuan (Snapshot)" FontSize="12" FontWeight="SemiBold" 
+                                       Foreground="{DynamicResource BrushTextSecondary}" Margin="0,0,0,4"/>
+                            <TextBox Text="{Binding FormUsageUnitPrice, UpdateSourceTrigger=PropertyChanged}"
+                                     Style="{DynamicResource InputTextBox}"
+                                     IsReadOnly="True"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- Preview Subtotal -->
+                    <Border Background="{DynamicResource BrushSidebarActive}"
+                            BorderBrush="{DynamicResource BrushBorder}"
+                            BorderThickness="1"
+                            CornerRadius="6"
+                            Padding="12,10"
+                            Margin="0,0,0,24">
+                        <Grid>
+                            <TextBlock Text="Subtotal Biaya Bahan:" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding FormUsageSubtotalDisplay}" 
+                                       FontSize="15" FontWeight="Bold" 
+                                       Foreground="{DynamicResource BrushPrimary}" 
+                                       HorizontalAlignment="Right"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Action Buttons -->
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button Style="{DynamicResource SecondaryButton}"
+                                Command="{Binding CancelUsageCommand}"
+                                Content="Batal"
+                                Padding="16,8" Margin="0,0,10,0"/>
+                        <Button Style="{DynamicResource PrimaryButton}"
+                                Command="{Binding SaveUsageCommand}"
+                                Content="Konfirmasi Pemakaian"
+                                Padding="20,8"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>

@@ -1,0 +1,30 @@
+<Application x:Class="AgroTrack.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:converters="clr-namespace:AgroTrack.Converters">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/AgroTrack;component/Themes/LightTheme.xaml" />
+                <ResourceDictionary Source="/AgroTrack;component/Resources/Styles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <!-- Converters -->
+            <converters:BooleanToVisibilityConverter x:Key="BoolToVisConverter" />
+            <converters:BooleanToVisibilityConverter x:Key="InverseBoolToVisConverter" Invert="True" />
+            <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            <converters:BooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" Invert="True" />
+            <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+
+            <converters:IntToBoolConverter x:Key="IntToBoolConverter" />
+            <converters:IntToVisibilityConverter x:Key="IntToVisibilityConverter" />
+
+            <converters:CurrencyConverter x:Key="CurrencyConverter" />
+            <converters:PercentageConverter x:Key="PercentageConverter" />
+            <converters:NullToVisibilityConverter x:Key="NullToVisConverter" />
+            <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
+            <converters:NullToVisibilityConverter x:Key="InverseNullToVisConverter" Invert="True" />
+            <converters:BooleanToStringConverter x:Key="BooleanToStringConverter" />
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

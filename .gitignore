@@ -1,0 +1,31 @@
+## .gitignore for AgroTrack WPF Project
+
+# Build results
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+*.user
+*.userosscache
+*.sln.docstates
+
+# Visual Studio / Rider / VS Code cache
+.vs/
+.idea/
+.vscode/
+*.suo
+*.userprefs
+*.dbmdl
+
+# Test results
+TestResults/
+[Tt]est[Rr]esult*/
+
+# Environment and sensitive config
+appsettings.local.json
+appsettings.json
+*.secrets.json
+
+# Dotnet temp files
+project.lock.json
+.nuget/

@@ -1,0 +1,373 @@
+<UserControl x:Class="AgroTrack.Views.UserManagementView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:vm="clr-namespace:AgroTrack.ViewModels"
+             mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance Type=vm:UserManagementViewModel}"
+             d:DesignHeight="700" d:DesignWidth="1000">
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Grid Grid.Row="0" Margin="0,0,0,20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0">
+                <TextBlock Text="Manajemen Pengguna" 
+                           FontSize="24" 
+                           FontWeight="Bold" 
+                           Foreground="{DynamicResource TextPrimaryBrush}"/>
+                <TextBlock Text="Kelola akun pengguna, peranan (role), dan status akses aplikasi AgroTrack." 
+                           FontSize="14" 
+                           Foreground="{DynamicResource TextSecondaryBrush}" 
+                           Margin="0,4,0,0"/>
+            </StackPanel>
+
+            <Button Grid.Column="1" 
+                    Content="+ Tambah Pengguna" 
+                    Style="{DynamicResource PrimaryButtonStyle}" 
+                    Command="{Binding OpenAddUserCommand}"
+                    Padding="16,8"/>
+        </Grid>
+
+        <!-- Filter & Search Toolbar -->
+        <Border Grid.Row="1" 
+                Background="{DynamicResource SurfaceBrush}" 
+                CornerRadius="8" 
+                Padding="16" 
+                Margin="0,0,0,16"
+                BorderBrush="{DynamicResource BorderBrush}" 
+                BorderThickness="1">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Search Input -->
+                <TextBox Grid.Column="0" 
+                         Text="{Binding SearchKeyword, UpdateSourceTrigger=PropertyChanged}" 
+                         Style="{DynamicResource ModernTextBoxStyle}"
+                         Margin="0,0,12,0" 
+                         Tag="Cari nama atau username pengguna..."/>
+
+                <!-- Role Filter -->
+                <ComboBox Grid.Column="1" 
+                          ItemsSource="{Binding RoleFilterOptions}" 
+                          SelectedItem="{Binding SelectedRoleFilter}" 
+                          Style="{DynamicResource ModernComboBoxStyle}"
+                          Width="160" 
+                          Margin="0,0,12,0"/>
+
+                <!-- Status Filter -->
+                <ComboBox Grid.Column="2" 
+                          ItemsSource="{Binding StatusFilterOptions}" 
+                          SelectedItem="{Binding SelectedStatusFilter}" 
+                          Style="{DynamicResource ModernComboBoxStyle}"
+                          Width="140" 
+                          Margin="0,0,12,0"/>
+
+                <!-- Refresh Button -->
+                <Button Grid.Column="3" 
+                        Content="Refresh" 
+                        Style="{DynamicResource SecondaryButtonStyle}" 
+                        Command="{Binding LoadUsersCommand}"
+                        Padding="14,8"/>
+            </Grid>
+        </Border>
+
+        <!-- Main DataGrid Area -->
+        <Border Grid.Row="2" 
+                Background="{DynamicResource SurfaceBrush}" 
+                CornerRadius="8" 
+                BorderBrush="{DynamicResource BorderBrush}" 
+                BorderThickness="1">
+            <Grid>
+                <!-- Empty State -->
+                <StackPanel VerticalAlignment="Center" 
+                            HorizontalAlignment="Center" 
+                            Margin="32"
+                            Visibility="{Binding FilteredUsers.Count, Converter={StaticResource IntToVisibilityConverter}, ConverterParameter=0}">
+                    <TextBlock Text="👥" FontSize="48" HorizontalAlignment="Center" Margin="0,0,0,12"/>
+                    <TextBlock Text="Tidak Ada Pengguna Ditemukan" 
+                               FontSize="18" 
+                               FontWeight="SemiBold" 
+                               Foreground="{DynamicResource TextPrimaryBrush}" 
+                               HorizontalAlignment="Center"/>
+                    <TextBlock Text="Tidak ada akun pengguna yang cocok dengan kriteria pencarian Anda." 
+                               FontSize="14" 
+                               Foreground="{DynamicResource TextSecondaryBrush}" 
+                               HorizontalAlignment="Center" 
+                               Margin="0,4,0,0"/>
+                </StackPanel>
+
+                <!-- DataGrid -->
+                <DataGrid ItemsSource="{Binding FilteredUsers}" 
+                          SelectedItem="{Binding SelectedUser}" 
+                          AutoGenerateColumns="False" 
+                          IsReadOnly="True" 
+                          SelectionMode="Single"
+                          GridLinesVisibility="Horizontal"
+                          HeadersVisibility="Column"
+                          Background="Transparent"
+                          BorderThickness="0"
+                          RowHeight="46"
+                          Margin="8">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ID" Binding="{Binding UserId}" Width="60"/>
+                        <DataGridTextColumn Header="Username" Binding="{Binding Username}" Width="150" FontWeight="SemiBold"/>
+                        <DataGridTextColumn Header="Nama Lengkap" Binding="{Binding FullName}" Width="*"/>
+                        <DataGridTemplateColumn Header="Role" Width="140">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Border CornerRadius="4" Padding="8,3" HorizontalAlignment="Left"
+                                            Background="{DynamicResource CardBrush}"
+                                            BorderBrush="{DynamicResource BorderBrush}"
+                                            BorderThickness="1">
+                                        <TextBlock Text="{Binding Role}" 
+                                                   FontWeight="SemiBold" 
+                                                   FontSize="12"
+                                                   Foreground="{DynamicResource PrimaryBrush}"/>
+                                    </Border>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Status" Width="110">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Border CornerRadius="4" Padding="8,3" HorizontalAlignment="Left">
+                                        <Border.Style>
+                                            <Style TargetType="Border">
+                                                <Setter Property="Background" Value="#22E02424"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsActive}" Value="True">
+                                                        <Setter Property="Background" Value="#220E9F6E"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
+                                        <TextBlock FontWeight="SemiBold" FontSize="12">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Text" Value="Nonaktif"/>
+                                                    <Setter Property="Foreground" Value="#E02424"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsActive}" Value="True">
+                                                            <Setter Property="Text" Value="Aktif"/>
+                                                            <Setter Property="Foreground" Value="#0E9F6E"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </Border>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Header="Tanggal Dibuat" Binding="{Binding CreatedAt, StringFormat='dd MMM yyyy'}" Width="130"/>
+                        <DataGridTemplateColumn Header="Aksi" Width="230">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                        <Button Content="Ubah" 
+                                                Style="{DynamicResource SecondaryButtonStyle}" 
+                                                Command="{Binding DataContext.OpenEditUserCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                Padding="8,4" 
+                                                Margin="0,0,6,0"/>
+                                        <Button Content="Reset Sandi" 
+                                                Style="{DynamicResource SecondaryButtonStyle}" 
+                                                Command="{Binding DataContext.OpenResetPasswordCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                Padding="8,4" 
+                                                Margin="0,0,6,0"/>
+                                        <Button Content="Status" 
+                                                Style="{DynamicResource SecondaryButtonStyle}" 
+                                                Command="{Binding DataContext.ToggleStatusCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                Padding="8,4"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+
+                <!-- Loading Overlay -->
+                <Border Background="#88000000" 
+                        CornerRadius="8"
+                        Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <ProgressBar IsIndeterminate="True" Width="200" Height="6"/>
+                        <TextBlock Text="Memproses data pengguna..." 
+                                   Foreground="White" 
+                                   FontWeight="SemiBold" 
+                                   Margin="0,12,0,0" 
+                                   HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Border>
+
+        <!-- Modal Editor Dialog (Tambah / Ubah) -->
+        <Border Grid.Row="0" Grid.RowSpan="3" 
+                Background="#99000000" 
+                Visibility="{Binding IsEditorOpen, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Border Background="{DynamicResource SurfaceBrush}" 
+                    CornerRadius="12" 
+                    Width="460" 
+                    Padding="24" 
+                    VerticalAlignment="Center" 
+                    HorizontalAlignment="Center"
+                    BorderBrush="{DynamicResource BorderBrush}" 
+                    BorderThickness="1">
+                <StackPanel>
+                    <TextBlock Text="{Binding IsEditing, Converter={StaticResource BooleanToStringConverter}, ConverterParameter='Ubah Data Pengguna;Tambah Pengguna Baru'}" 
+                               FontSize="18" 
+                               FontWeight="Bold" 
+                               Foreground="{DynamicResource TextPrimaryBrush}" 
+                               Margin="0,0,0,16"/>
+
+                    <!-- Error Alert -->
+                    <Border Background="#22E02424" 
+                            BorderBrush="#E02424" 
+                            BorderThickness="1" 
+                            CornerRadius="6" 
+                            Padding="12" 
+                            Margin="0,0,0,14"
+                            Visibility="{Binding FormErrorMessage, Converter={StaticResource NullToVisibilityConverter}}">
+                        <TextBlock Text="{Binding FormErrorMessage}" 
+                                   Foreground="#E02424" 
+                                   TextWrapping="Wrap" 
+                                   FontSize="13"/>
+                    </Border>
+
+                    <!-- Username -->
+                    <TextBlock Text="Username *" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,0,0,4"/>
+                    <TextBox Text="{Binding FormUsername, UpdateSourceTrigger=PropertyChanged}" 
+                             IsEnabled="{Binding IsEditing, Converter={StaticResource InverseBooleanConverter}}"
+                             Style="{DynamicResource ModernTextBoxStyle}" 
+                             Margin="0,0,0,12"/>
+
+                    <!-- FullName -->
+                    <TextBlock Text="Nama Lengkap *" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,0,0,4"/>
+                    <TextBox Text="{Binding FormFullName, UpdateSourceTrigger=PropertyChanged}" 
+                             Style="{DynamicResource ModernTextBoxStyle}" 
+                             Margin="0,0,0,12"/>
+
+                    <!-- Role -->
+                    <TextBlock Text="Peranan (Role) *" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,0,0,4"/>
+                    <ComboBox ItemsSource="{Binding AvailableRoles}" 
+                              SelectedItem="{Binding FormRole}" 
+                              Style="{DynamicResource ModernComboBoxStyle}" 
+                              Margin="0,0,0,12"/>
+
+                    <!-- Password (if adding) -->
+                    <StackPanel Visibility="{Binding IsEditing, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}">
+                        <TextBlock Text="Password Awal (minimal 6 karakter) *" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,0,0,4"/>
+                        <TextBox Text="{Binding FormPassword, UpdateSourceTrigger=PropertyChanged}" 
+                                 Style="{DynamicResource ModernTextBoxStyle}" 
+                                 Margin="0,0,0,16"/>
+                    </StackPanel>
+
+                    <!-- Buttons -->
+                    <Grid Margin="0,8,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Button Grid.Column="0" 
+                                Content="Batal" 
+                                Style="{DynamicResource SecondaryButtonStyle}" 
+                                Command="{Binding CloseDialogCommand}" 
+                                Margin="0,0,8,0" 
+                                Padding="0,10"/>
+                        <Button Grid.Column="1" 
+                                Content="Simpan" 
+                                Style="{DynamicResource PrimaryButtonStyle}" 
+                                Command="{Binding SaveUserCommand}" 
+                                Margin="8,0,0,0" 
+                                Padding="0,10"/>
+                    </Grid>
+                </StackPanel>
+            </Border>
+        </Border>
+
+        <!-- Modal Reset Password Dialog -->
+        <Border Grid.Row="0" Grid.RowSpan="3" 
+                Background="#99000000" 
+                Visibility="{Binding IsResetPasswordOpen, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Border Background="{DynamicResource SurfaceBrush}" 
+                    CornerRadius="12" 
+                    Width="400" 
+                    Padding="24" 
+                    VerticalAlignment="Center" 
+                    HorizontalAlignment="Center"
+                    BorderBrush="{DynamicResource BorderBrush}" 
+                    BorderThickness="1">
+                <StackPanel>
+                    <TextBlock Text="Reset Password Pengguna" 
+                               FontSize="18" 
+                               FontWeight="Bold" 
+                               Foreground="{DynamicResource TextPrimaryBrush}" 
+                               Margin="0,0,0,8"/>
+
+                    <TextBlock Margin="0,0,0,16" Foreground="{DynamicResource TextSecondaryBrush}" TextWrapping="Wrap">
+                        <Run Text="Masukkan kata sandi baru untuk akun "/>
+                        <Run Text="{Binding SelectedUser.Username, Mode=OneWay}" FontWeight="Bold" Foreground="{DynamicResource TextPrimaryBrush}"/>
+                        <Run Text="."/>
+                    </TextBlock>
+
+                    <!-- Error Alert -->
+                    <Border Background="#22E02424" 
+                            BorderBrush="#E02424" 
+                            BorderThickness="1" 
+                            CornerRadius="6" 
+                            Padding="12" 
+                            Margin="0,0,0,14"
+                            Visibility="{Binding FormErrorMessage, Converter={StaticResource NullToVisibilityConverter}}">
+                        <TextBlock Text="{Binding FormErrorMessage}" 
+                                   Foreground="#E02424" 
+                                   TextWrapping="Wrap" 
+                                   FontSize="13"/>
+                    </Border>
+
+                    <TextBlock Text="Password Baru (minimal 6 karakter) *" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,0,0,4"/>
+                    <TextBox Text="{Binding NewPasswordForReset, UpdateSourceTrigger=PropertyChanged}" 
+                             Style="{DynamicResource ModernTextBoxStyle}" 
+                             Margin="0,0,0,16"/>
+
+                    <!-- Buttons -->
+                    <Grid Margin="0,8,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Button Grid.Column="0" 
+                                Content="Batal" 
+                                Style="{DynamicResource SecondaryButtonStyle}" 
+                                Command="{Binding CloseDialogCommand}" 
+                                Margin="0,0,8,0" 
+                                Padding="0,10"/>
+                        <Button Grid.Column="1" 
+                                Content="Simpan Sandi" 
+                                Style="{DynamicResource PrimaryButtonStyle}" 
+                                Command="{Binding SaveResetPasswordCommand}" 
+                                Margin="8,0,0,0" 
+                                Padding="0,10"/>
+                    </Grid>
+                </StackPanel>
+            </Border>
+        </Border>
+    </Grid>
+</UserControl>

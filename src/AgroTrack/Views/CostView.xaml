@@ -1,0 +1,405 @@
+<UserControl x:Class="AgroTrack.Views.CostView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:viewmodels="clr-namespace:AgroTrack.ViewModels"
+             mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance Type=viewmodels:CostViewModel}"
+             d:DesignHeight="750" d:DesignWidth="1100">
+
+    <Grid Margin="24">
+        <!-- Main Content -->
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/> <!-- Page Header -->
+                <RowDefinition Height="Auto"/> <!-- Summary Statistics Cards -->
+                <RowDefinition Height="Auto"/> <!-- Search & Filter Panel -->
+                <RowDefinition Height="*"/>    <!-- DataGrid & States -->
+                <RowDefinition Height="Auto"/> <!-- Pagination Toolbar -->
+            </Grid.RowDefinitions>
+
+            <!-- 1. Page Header -->
+            <Grid Grid.Row="0" Margin="0,0,0,16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="Biaya Operasional Budidaya" 
+                               FontSize="24" FontWeight="Bold" 
+                               Foreground="{DynamicResource BrushTextPrimary}"/>
+                    <TextBlock Text="Pencatatan pos pengeluaran tenaga kerja, sewa alat, irigasi, dan perawatan tanaman." 
+                               FontSize="13" Margin="0,4,0,0"
+                               Foreground="{DynamicResource BrushTextSecondary}"/>
+                </StackPanel>
+
+                <Button Grid.Column="1" 
+                        Style="{DynamicResource PrimaryButton}"
+                        Command="{Binding OpenCreateFormCommand}"
+                        Padding="16,10">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="＋" FontWeight="Bold" Margin="0,0,8,0" FontSize="14"/>
+                        <TextBlock Text="Catat Biaya" FontWeight="SemiBold"/>
+                    </StackPanel>
+                </Button>
+            </Grid>
+
+            <!-- 2. Summary Statistics Cards -->
+            <Grid Grid.Row="1" Margin="0,0,0,16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="16"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Total Biaya Card -->
+                <Border Grid.Column="0" 
+                        Background="{DynamicResource BrushCardBackground}"
+                        BorderBrush="{DynamicResource BrushBorder}"
+                        BorderThickness="1"
+                        CornerRadius="8"
+                        Padding="18,14">
+                    <StackPanel>
+                        <TextBlock Text="TOTAL BIAYA TERCATAT" FontSize="11" FontWeight="Bold"
+                                   Foreground="{DynamicResource BrushTextSecondary}"/>
+                        <TextBlock Text="{Binding GrandTotalCostDisplay}" 
+                                   FontSize="22" FontWeight="Bold" 
+                                   Foreground="{DynamicResource BrushPrimary}" Margin="0,4,0,0"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Total Transaksi Card -->
+                <Border Grid.Column="2" 
+                        Background="{DynamicResource BrushCardBackground}"
+                        BorderBrush="{DynamicResource BrushBorder}"
+                        BorderThickness="1"
+                        CornerRadius="8"
+                        Padding="18,14">
+                    <StackPanel>
+                        <TextBlock Text="TOTAL TRANSAKSI BIAYA" FontSize="11" FontWeight="Bold"
+                                   Foreground="{DynamicResource BrushTextSecondary}"/>
+                        <TextBlock Text="{Binding TotalItems}" 
+                                   FontSize="22" FontWeight="Bold" 
+                                   Foreground="{DynamicResource BrushTextPrimary}" Margin="0,4,0,0"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <!-- 3. Search & Filter Bar -->
+            <Border Grid.Row="2" 
+                    Background="{DynamicResource BrushCardBackground}"
+                    BorderBrush="{DynamicResource BrushBorder}"
+                    BorderThickness="1"
+                    CornerRadius="8"
+                    Padding="16"
+                    Margin="0,0,0,16">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2.2*"/>
+                        <ColumnDefinition Width="1.5*"/>
+                        <ColumnDefinition Width="1.3*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Search Input -->
+                    <StackPanel Grid.Column="0" Margin="0,0,12,0">
+                        <TextBlock Text="Pencarian" FontSize="11" FontWeight="SemiBold" 
+                                   Foreground="{DynamicResource BrushTextSecondary}" Margin="0,0,0,4"/>
+                        <TextBox Text="{Binding SearchTerm, UpdateSourceTrigger=PropertyChanged}"
+                                 Style="{DynamicResource InputTextBox}"
+                                 Tag="Cari uraian biaya, penanaman, atau pencatat..."/>
+                    </StackPanel>
+
+                    <!-- Planting Filter -->
+                    <StackPanel Grid.Column="1" Margin="0,0,12,0">
+                        <TextBlock Text="Penanaman" FontSize="11" FontWeight="SemiBold" 
+                                   Foreground="{DynamicResource BrushTextSecondary}" Margin="0,0,0,4"/>
+                        <ComboBox ItemsSource="{Binding Plantings}"
+                                  SelectedValue="{Binding SelectedPlantingId}"
+                                  SelectedValuePath="PlantingId"
+                                  DisplayMemberPath="PlantingCode"
+                                  Style="{DynamicResource ModernComboBox}"/>
+                    </StackPanel>
+
+                    <!-- Category Filter -->
+                    <StackPanel Grid.Column="2" Margin="0,0,12,0">
+                        <TextBlock Text="Kategori Biaya" FontSize="11" FontWeight="SemiBold" 
+                                   Foreground="{DynamicResource BrushTextSecondary}" Margin="0,0,0,4"/>
+                        <ComboBox ItemsSource="{Binding CostCategories}"
+                                  SelectedItem="{Binding SelectedCategoryFilter}"
+                                  Style="{DynamicResource ModernComboBox}"/>
+                    </StackPanel>
+
+                    <!-- Filter Action Buttons -->
+                    <StackPanel Grid.Column="3" Orientation="Horizontal" VerticalAlignment="Bottom">
+                        <Button Style="{DynamicResource SecondaryButton}" 
+                                Command="{Binding SearchCommand}"
+                                ToolTip="Terapkan Filter"
+                                Padding="12,8" Margin="0,0,8,0">
+                            <TextBlock Text="🔍 Filter" FontWeight="SemiBold"/>
+                        </Button>
+                        <Button Style="{DynamicResource SecondaryButton}" 
+                                Command="{Binding ResetFilterCommand}"
+                                ToolTip="Reset Filter"
+                                Padding="12,8">
+                            <TextBlock Text="↺ Reset" FontWeight="SemiBold"/>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- 4. Main DataGrid & States -->
+            <Border Grid.Row="3"
+                    Background="{DynamicResource BrushCardBackground}"
+                    BorderBrush="{DynamicResource BrushBorder}"
+                    BorderThickness="1"
+                    CornerRadius="8"
+                    ClipToBounds="True">
+                <Grid>
+                    <!-- Loading State -->
+                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center"
+                                Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <ProgressBar IsIndeterminate="True" Width="200" Height="6" Margin="0,0,0,12"/>
+                        <TextBlock Text="Memuat data biaya operasional..." 
+                                   Foreground="{DynamicResource BrushTextSecondary}" 
+                                   HorizontalAlignment="Center"/>
+                    </StackPanel>
+
+                    <!-- Empty State -->
+                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center"
+                                Visibility="{Binding IsEmpty, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <TextBlock Text="💵" FontSize="48" HorizontalAlignment="Center" Margin="0,0,0,12"/>
+                        <TextBlock Text="Belum ada transaksi biaya operasional" 
+                                   FontSize="16" FontWeight="SemiBold" 
+                                   Foreground="{DynamicResource BrushTextPrimary}" 
+                                   HorizontalAlignment="Center"/>
+                        <TextBlock Text="Klik tombol 'Catat Biaya' untuk menambahkan pengeluaran operasional baru." 
+                                   FontSize="13" Margin="0,6,0,0"
+                                   Foreground="{DynamicResource BrushTextSecondary}" 
+                                   HorizontalAlignment="Center"/>
+                    </StackPanel>
+
+                    <!-- DataGrid -->
+                    <DataGrid ItemsSource="{Binding Costs}"
+                              AutoGenerateColumns="False"
+                              IsReadOnly="True"
+                              CanUserAddRows="False"
+                              CanUserSortColumns="True"
+                              GridLinesVisibility="Horizontal"
+                              HeadersVisibility="Column"
+                              Background="Transparent"
+                              RowHeight="44"
+                              SelectionMode="Single"
+                              BorderThickness="0"
+                              Visibility="{Binding IsEmpty, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+                        <DataGrid.Columns>
+                            <!-- Tanggal -->
+                            <DataGridTextColumn Header="Tanggal" 
+                                                Binding="{Binding CostDateDisplay}" 
+                                                Width="110"/>
+
+                            <!-- Penanaman -->
+                            <DataGridTemplateColumn Header="Penanaman" Width="140">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding PlantingCode}" FontWeight="SemiBold" 
+                                                       Foreground="{DynamicResource BrushPrimary}"/>
+                                            <TextBlock Text="{Binding SeasonName}" FontSize="11" 
+                                                       Foreground="{DynamicResource BrushTextSecondary}"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <!-- Lahan & Komoditas -->
+                            <DataGridTemplateColumn Header="Lahan &amp; Komoditas" Width="150">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding CommodityName}" FontWeight="SemiBold"/>
+                                            <TextBlock Text="{Binding LandName}" FontSize="11" 
+                                                       Foreground="{DynamicResource BrushTextSecondary}"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <!-- Kategori Biaya -->
+                            <DataGridTextColumn Header="Kategori" 
+                                                Binding="{Binding CategoryDisplay}" 
+                                                Width="120"/>
+
+                            <!-- Uraian Biaya -->
+                            <DataGridTextColumn Header="Uraian Biaya" 
+                                                Binding="{Binding Description}" 
+                                                Width="*"/>
+
+                            <!-- Jumlah Biaya (Rupiah) -->
+                            <DataGridTextColumn Header="Jumlah Biaya" 
+                                                Binding="{Binding AmountDisplay}" 
+                                                FontWeight="Bold"
+                                                Width="130"/>
+
+                            <!-- Pencatat -->
+                            <DataGridTextColumn Header="Pencatat" 
+                                                Binding="{Binding CreatorName}" 
+                                                Width="120"/>
+
+                            <!-- Aksi -->
+                            <DataGridTemplateColumn Header="Aksi" Width="120">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                            <Button Style="{DynamicResource SecondaryButton}"
+                                                    Command="{Binding DataContext.OpenEditFormCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                    CommandParameter="{Binding}"
+                                                    Padding="8,4" Margin="0,0,6,0"
+                                                    ToolTip="Ubah Biaya">
+                                                <TextBlock Text="✏️" FontSize="11"/>
+                                            </Button>
+                                            <Button Style="{DynamicResource DangerButton}"
+                                                    Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                    CommandParameter="{Binding}"
+                                                    Padding="8,4"
+                                                    ToolTip="Hapus Biaya">
+                                                <TextBlock Text="🗑️" FontSize="11"/>
+                                            </Button>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </Border>
+
+            <!-- 5. Pagination Toolbar -->
+            <Grid Grid.Row="4" Margin="0,12,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="Menampilkan " Foreground="{DynamicResource BrushTextSecondary}"/>
+                    <TextBlock Text="{Binding Costs.Count}" FontWeight="Bold" Foreground="{DynamicResource BrushTextPrimary}"/>
+                    <TextBlock Text=" dari total " Foreground="{DynamicResource BrushTextSecondary}"/>
+                    <TextBlock Text="{Binding TotalItems}" FontWeight="Bold" Foreground="{DynamicResource BrushTextPrimary}"/>
+                    <TextBlock Text=" data (Halaman " Foreground="{DynamicResource BrushTextSecondary}"/>
+                    <TextBlock Text="{Binding CurrentPage}" FontWeight="Bold" Foreground="{DynamicResource BrushTextPrimary}"/>
+                    <TextBlock Text=" dari " Foreground="{DynamicResource BrushTextSecondary}"/>
+                    <TextBlock Text="{Binding TotalPages}" FontWeight="Bold" Foreground="{DynamicResource BrushTextPrimary}"/>
+                    <TextBlock Text=")" Foreground="{DynamicResource BrushTextSecondary}"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <Button Style="{DynamicResource SecondaryButton}"
+                            Command="{Binding PreviousPageCommand}"
+                            Padding="12,6" Margin="0,0,8,0">
+                        <TextBlock Text="◀ Sebelumnya"/>
+                    </Button>
+                    <Button Style="{DynamicResource SecondaryButton}"
+                            Command="{Binding NextPageCommand}"
+                            Padding="12,6">
+                        <TextBlock Text="Berikutnya ▶"/>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Grid>
+
+        <!-- 6. Form Modal Dialog (Overlay) -->
+        <Grid Visibility="{Binding IsFormOpen, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Border Background="#80000000"/>
+
+            <Border Background="{DynamicResource BrushCardBackground}"
+                    BorderBrush="{DynamicResource BrushBorder}"
+                    BorderThickness="1"
+                    CornerRadius="12"
+                    Width="520"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    Padding="28"
+                    Effect="{DynamicResource ShadowMedium}">
+                <StackPanel>
+                    <Grid Margin="0,0,0,20">
+                        <TextBlock Text="{Binding FormTitle}" 
+                                   FontSize="18" FontWeight="Bold" 
+                                   Foreground="{DynamicResource BrushTextPrimary}"/>
+                        <Button Style="{DynamicResource SecondaryButton}"
+                                Command="{Binding CancelFormCommand}"
+                                HorizontalAlignment="Right"
+                                Padding="8,2" Content="✕"/>
+                    </Grid>
+
+                    <!-- Penanaman -->
+                    <TextBlock Text="Penanaman Terkait *" FontSize="12" FontWeight="SemiBold" 
+                               Foreground="{DynamicResource BrushTextSecondary}" Margin="0,0,0,4"/>
+                    <ComboBox ItemsSource="{Binding Plantings}"
+                              SelectedValue="{Binding FormPlantingId}"
+                              SelectedValuePath="PlantingId"
+                              DisplayMemberPath="PlantingCode"
+                              Style="{DynamicResource ModernComboBox}"
+                              Margin="0,0,0,12"/>
+
+                    <!-- Kategori & Tanggal -->
+                    <Grid Margin="0,0,0,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="16"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="Kategori Biaya *" FontSize="12" FontWeight="SemiBold" 
+                                       Foreground="{DynamicResource BrushTextSecondary}" Margin="0,0,0,4"/>
+                            <ComboBox ItemsSource="{Binding CostCategories}"
+                                      SelectedItem="{Binding FormCategory}"
+                                      Style="{DynamicResource ModernComboBox}"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="2">
+                            <TextBlock Text="Tanggal Transaksi *" FontSize="12" FontWeight="SemiBold" 
+                                       Foreground="{DynamicResource BrushTextSecondary}" Margin="0,0,0,4"/>
+                            <DatePicker SelectedDate="{Binding FormCostDate}"
+                                        Style="{DynamicResource ModernDatePicker}"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- Jumlah Biaya (Rupiah) -->
+                    <TextBlock Text="Nominal Biaya (Rp) *" FontSize="12" FontWeight="SemiBold" 
+                               Foreground="{DynamicResource BrushTextSecondary}" Margin="0,0,0,4"/>
+                    <TextBox Text="{Binding FormAmount, UpdateSourceTrigger=PropertyChanged}"
+                             Style="{DynamicResource InputTextBox}"
+                             Tag="Contoh: 1500000"
+                             Margin="0,0,0,12"/>
+
+                    <!-- Uraian Biaya -->
+                    <TextBlock Text="Uraian Keterangan *" FontSize="12" FontWeight="SemiBold" 
+                               Foreground="{DynamicResource BrushTextSecondary}" Margin="0,0,0,4"/>
+                    <TextBox Text="{Binding FormDescription, UpdateSourceTrigger=PropertyChanged}"
+                             Style="{DynamicResource InputTextBox}"
+                             AcceptsReturn="True"
+                             Height="75"
+                             TextWrapping="Wrap"
+                             Tag="Catatan rincian biaya operasional..."
+                             Margin="0,0,0,24"/>
+
+                    <!-- Action Buttons -->
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button Style="{DynamicResource SecondaryButton}"
+                                Command="{Binding CancelFormCommand}"
+                                Content="Batal"
+                                Padding="16,8" Margin="0,0,10,0"/>
+                        <Button Style="{DynamicResource PrimaryButton}"
+                                Command="{Binding SaveFormCommand}"
+                                Content="Simpan Biaya"
+                                Padding="20,8"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>

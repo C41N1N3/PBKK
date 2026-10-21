@@ -1,0 +1,286 @@
+<style>
+  body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 860px; margin: 0 auto; color: #1a2e1d; line-height: 1.7; }
+  h1 { font-size: 2em; color: #1B5E20; border-bottom: 3px solid #2E7D32; padding-bottom: 10px; margin-top: 32px; }
+  h2 { font-size: 1.4em; color: #2E7D32; margin-top: 36px; border-left: 4px solid #4CAF50; padding-left: 12px; }
+  h3 { font-size: 1.15em; color: #388E3C; margin-top: 24px; }
+  .badge { display: inline-block; background: #E8F5E9; color: #1B5E20; border: 1px solid #A5D6A7; border-radius: 20px; padding: 3px 14px; font-size: 0.85em; font-weight: bold; margin: 2px; }
+  .badge-blue { background: #E3F2FD; color: #0D47A1; border-color: #90CAF9; }
+  .badge-orange { background: #FFF3E0; color: #E65100; border-color: #FFCC80; }
+  .info-box { background: #F1F8E9; border: 1px solid #C5E1A5; border-radius: 8px; padding: 16px 20px; margin: 20px 0; }
+  .warning-box { background: #FFF8E1; border: 1px solid #FFE082; border-radius: 8px; padding: 16px 20px; margin: 20px 0; }
+  .step { background: #FAFAFA; border: 1px solid #E0E0E0; border-radius: 8px; padding: 16px 20px; margin: 12px 0; }
+  .step-num { display: inline-block; background: #2E7D32; color: white; border-radius: 50%; width: 26px; height: 26px; text-align: center; line-height: 26px; font-weight: bold; margin-right: 8px; font-size: 0.9em; }
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.95em; }
+  th { background: #2E7D32; color: white; padding: 10px 14px; text-align: left; }
+  td { padding: 9px 14px; border-bottom: 1px solid #E0E0E0; }
+  tr:nth-child(even) td { background: #F9FBF9; }
+  code { background: #F1F8E9; color: #1B5E20; padding: 2px 7px; border-radius: 4px; font-family: Consolas, monospace; font-size: 0.92em; }
+  .feature-card { background: white; border: 1px solid #C8E6C9; border-radius: 10px; padding: 18px 22px; margin: 14px 0; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+  .feature-card h3 { margin-top: 0; color: #1B5E20; }
+  .divider { border: none; border-top: 2px solid #E8F5E9; margin: 32px 0; }
+  ul li { margin-bottom: 6px; }
+  .role-admin { color: #1565C0; font-weight: bold; }
+  .role-manager { color: #2E7D32; font-weight: bold; }
+  .role-petugas { color: #E65100; font-weight: bold; }
+</style>
+
+<h1>📋 Laporan Penggunaan Aplikasi AgroTrack</h1>
+<p><strong>AgroTrack</strong> adalah aplikasi desktop berbasis <strong>C# / WPF (.NET 8)</strong> yang dikembangkan sebagai Tugas Evaluasi Tengah Semester (ETS) mata kuliah <em>Pemrograman Berbasis Kerangka Kerja (PBKK)</em>. Aplikasi ini dirancang untuk membantu pengelola pertanian dalam merencanakan, mencatat, dan memantau seluruh siklus produksi — mulai dari lahan, musim tanam, aktivitas lapangan, stok bahan, biaya operasional, hingga hasil panen dan laporan laba rugi.</p>
+
+<div class="info-box">
+  <strong>🛠 Teknologi yang Digunakan:</strong><br>
+  <span class="badge">C# 12 / .NET 8 LTS</span>
+  <span class="badge">WPF (XAML)</span>
+  <span class="badge">MVVM Architecture</span>
+  <span class="badge badge-blue">SQL Server Express</span>
+  <span class="badge badge-blue">ADO.NET</span>
+  <span class="badge badge-orange">PBKDF2 Security</span>
+</div>
+
+<hr class="divider">
+
+<h1>1. Cara Login ke Aplikasi</h1>
+<p>Saat pertama kali membuka AgroTrack, pengguna akan disambut halaman login dengan tampilan dua panel: panel kiri menjelaskan fitur-fitur AgroTrack, dan panel kanan berisi form login.</p>
+
+<h3>Langkah Login:</h3>
+<div class="step"><span class="step-num">1</span> Buka aplikasi <code>AgroTrack.exe</code> dari folder instalasi.</div>
+<div class="step"><span class="step-num">2</span> Pastikan SQL Server berjalan — aplikasi membutuhkan koneksi ke database <code>AgroTrackDb</code>.</div>
+<div class="step"><span class="step-num">3</span> Masukkan <strong>Username</strong> dan <strong>Password</strong> di panel kanan.</div>
+<div class="step"><span class="step-num">4</span> Klik tombol <strong>"Masuk ke Sistem"</strong>.</div>
+<div class="step"><span class="step-num">5</span> Tersedia tombol demo cepat: <strong>Admin</strong>, <strong>Manajer</strong>, dan <strong>Petugas</strong> untuk mengisi kredensial otomatis saat pengujian.</div>
+
+<h3>Akun Demo yang Tersedia:</h3>
+<table>
+  <tr><th>Peran</th><th>Username</th><th>Password</th><th>Hak Akses</th></tr>
+  <tr><td><span class="role-admin">Administrator</span></td><td><code>admin</code></td><td><code>AdminPassword@123</code></td><td>Seluruh modul, termasuk manajemen pengguna</td></tr>
+  <tr><td><span class="role-manager">Manager</span></td><td><code>manager</code></td><td><code>ManagerPassword@123</code></td><td>Dashboard, master data, musim tanam, laporan</td></tr>
+  <tr><td><span class="role-petugas">Petugas Lapangan</span></td><td><code>petugas</code></td><td><code>PetugasPassword@123</code></td><td>Aktivitas lapangan, penggunaan bahan, panen</td></tr>
+</table>
+
+<div class="warning-box">⚠️ Jika login gagal dengan pesan <em>"Instance failure"</em>, pastikan layanan <strong>SQL Server (SQLEXPRESS)</strong> sudah berjalan dan port <strong>1433</strong> aktif.</div>
+
+<hr class="divider">
+
+<h1>2. Tampilan Utama Setelah Login</h1>
+<p>Setelah berhasil login, pengguna masuk ke shell utama aplikasi yang terdiri dari:</p>
+<ul>
+  <li><strong>Sidebar kiri</strong> — navigasi menu utama dengan dua bagian: <em>Operasional</em> dan <em>Logistik &amp; Keuangan</em></li>
+  <li><strong>Header atas</strong> — menampilkan breadcrumb halaman aktif, tombol ganti tema (Light/Dark), dan tombol Keluar</li>
+  <li><strong>Area konten</strong> — menampilkan halaman sesuai menu yang dipilih</li>
+  <li><strong>Footer sidebar</strong> — menampilkan nama dan peran pengguna yang sedang login</li>
+</ul>
+
+<hr class="divider">
+
+<h1>3. Fitur-Fitur Aplikasi</h1>
+
+<div class="feature-card">
+  <h3>📊 3.1 Dashboard</h3>
+  <p>Halaman pertama setelah login. Menampilkan ringkasan operasional pertanian secara real-time langsung dari database.</p>
+  <strong>Informasi yang ditampilkan:</strong>
+  <ul>
+    <li>Jumlah <strong>Lahan Aktif</strong> dan total luas (hektare)</li>
+    <li>Jumlah <strong>Penanaman Aktif</strong> yang sedang berjalan</li>
+    <li>Jumlah <strong>Aktivitas Hari Ini</strong></li>
+    <li>Jumlah <strong>Bahan Menipis</strong> (stok di bawah batas minimum)</li>
+    <li>Total <strong>Hasil Panen</strong> (kg), <strong>Biaya Operasional</strong>, <strong>Pendapatan</strong>, dan <strong>Estimasi Laba Bersih</strong> dalam format Rupiah</li>
+    <li>Grafik batang <strong>Target vs Realisasi Panen</strong> per musim tanam</li>
+    <li>Distribusi komoditas yang sedang ditanam</li>
+    <li>Daftar penanaman yang mendekati jadwal panen</li>
+  </ul>
+</div>
+
+<div class="feature-card">
+  <h3>🗺️ 3.2 Manajemen Lahan Pertanian</h3>
+  <p>Modul untuk mendaftarkan dan mengelola data lahan pertanian yang dimiliki.</p>
+  <strong>Data yang dicatat per lahan:</strong>
+  <ul>
+    <li>Kode lahan unik (contoh: <code>LHN-001</code>)</li>
+    <li>Nama lahan, lokasi, dan deskripsi</li>
+    <li>Luas lahan dalam <strong>hektare</strong></li>
+    <li>Jenis tanah (Aluvial, Lempung Berpasir, Andosol, dll.)</li>
+    <li>Status lahan: <em>Aktif, Istirahat, Pemeliharaan, Nonaktif</em></li>
+  </ul>
+  <strong>Fitur:</strong> Tambah, edit, hapus lahan. Lahan yang sudah terikat penanaman tidak dapat dihapus untuk menjaga integritas data.
+</div>
+
+<div class="feature-card">
+  <h3>🌾 3.3 Manajemen Komoditas</h3>
+  <p>Modul untuk mendaftarkan jenis-jenis tanaman/komoditas pertanian yang dibudidayakan.</p>
+  <strong>Data yang dicatat:</strong>
+  <ul>
+    <li>Kode komoditas unik (contoh: <code>KMD-001</code>)</li>
+    <li>Nama komoditas (contoh: Padi Ciherang, Jagung Manis Bonanza)</li>
+    <li>Satuan hasil panen (kg, ton, kuintal, pack)</li>
+    <li>Estimasi hari tumbuh hingga panen</li>
+    <li>Status aktif/nonaktif</li>
+  </ul>
+</div>
+
+<div class="feature-card">
+  <h3>📅 3.4 Manajemen Musim Tanam (Penanaman)</h3>
+  <p>Modul inti yang mengelola siklus hidup lengkap setiap musim tanam — dari perencanaan hingga selesai panen.</p>
+  <strong>Data yang dicatat:</strong>
+  <ul>
+    <li>Kode penanaman unik, nama musim tanam</li>
+    <li>Lahan dan komoditas yang digunakan</li>
+    <li>Tanggal mulai dan estimasi tanggal panen</li>
+    <li>Luas tanam (hektare) dan target hasil panen</li>
+    <li>Catatan tambahan</li>
+  </ul>
+  <strong>Status siklus hidup:</strong>
+  <table>
+    <tr><th>Status</th><th>Keterangan</th></tr>
+    <tr><td>Direncanakan</td><td>Penanaman baru dibuat, belum dimulai</td></tr>
+    <tr><td>Aktif</td><td>Proses penanaman sedang berjalan</td></tr>
+    <tr><td>Siap Panen</td><td>Tanaman siap untuk dipanen</td></tr>
+    <tr><td>Selesai</td><td>Musim tanam telah selesai</td></tr>
+    <tr><td>Dibatalkan</td><td>Penanaman dibatalkan (misal: bencana alam)</td></tr>
+  </table>
+  <strong>Validasi otomatis:</strong> Sistem mencegah penambahan luas tanam melebihi kapasitas fisik lahan dan mencegah irisan periode musim tanam aktif yang melampaui kapasitas lahan.
+</div>
+
+<div class="feature-card">
+  <h3>🚜 3.5 Aktivitas Lapangan</h3>
+  <p>Modul pencatatan semua kegiatan teknis yang dilakukan di lapangan selama musim tanam berlangsung.</p>
+  <strong>Jenis aktivitas yang bisa dicatat:</strong>
+  <ul>
+    <li>Persiapan lahan, Penanaman, Penyiraman</li>
+    <li>Pemupukan, Penyiangan, Pengendalian hama</li>
+    <li>Pemeriksaan tanaman, Panen</li>
+  </ul>
+  <strong>Data per aktivitas:</strong> Tanggal, durasi (jam), petugas yang bertugas, status (Terjadwal / Berlangsung / Selesai / Dibatalkan), dan catatan detail kegiatan.
+</div>
+
+<div class="feature-card">
+  <h3>📦 3.6 Manajemen Bahan &amp; Stok</h3>
+  <p>Modul inventaris untuk mengelola semua bahan pertanian yang digunakan.</p>
+  <strong>Kategori bahan:</strong>
+  <ul>
+    <li>Benih (Seed)</li>
+    <li>Pupuk (Fertilizer)</li>
+    <li>Pestisida (Pesticide)</li>
+    <li>Fungisida, Herbisida</li>
+    <li>Alat habis pakai (ConsumableTool)</li>
+  </ul>
+  <strong>Data per bahan:</strong> Kode unik, nama, satuan, stok saat ini, stok minimum (batas peringatan), dan harga satuan.<br><br>
+  <strong>Fitur stok atomik (ACID):</strong> Saat petugas mencatat penggunaan bahan pada aktivitas, stok otomatis berkurang. Jika pencatatan dibatalkan, stok dikembalikan — semua dalam satu transaksi database yang aman.
+</div>
+
+<div class="feature-card">
+  <h3>💰 3.7 Biaya Operasional</h3>
+  <p>Modul pencatatan semua pengeluaran yang terjadi selama musim tanam, terhubung langsung ke data penanaman.</p>
+  <strong>Kategori biaya:</strong>
+  <ul>
+    <li>Tenaga kerja</li>
+    <li>Sewa alat (traktor, mesin perontok, dll.)</li>
+    <li>Transportasi</li>
+    <li>Irigasi</li>
+    <li>Bahan bakar, Perawatan</li>
+  </ul>
+  Semua nominal ditampilkan dalam format <strong>Rupiah (Rp X.XXX.XXX)</strong>. Hanya dapat diakses oleh Administrator dan Manajer.
+</div>
+
+<div class="feature-card">
+  <h3>🌽 3.8 Hasil Panen</h3>
+  <p>Modul pencatatan realisasi panen — mendukung <strong>panen bertahap</strong> (multiple batch per satu musim tanam).</p>
+  <strong>Data yang dicatat per sesi panen:</strong>
+  <ul>
+    <li>Tanggal panen</li>
+    <li>Jumlah hasil panen (kg/satuan komoditas)</li>
+    <li>Kualitas panen: <em>Grade A, Grade B, Grade C</em></li>
+    <li>Harga jual per satuan</li>
+    <li>Total pendapatan (otomatis dihitung: <code>Jumlah × Harga</code>)</li>
+    <li>Catatan tambahan</li>
+  </ul>
+</div>
+
+<div class="feature-card">
+  <h3>📈 3.9 Laporan Produksi</h3>
+  <p>Laporan komprehensif per musim tanam yang menampilkan analisis finansial lengkap.</p>
+  <strong>Informasi dalam laporan:</strong>
+  <ul>
+    <li>Target produksi vs realisasi aktual (dalam kg &amp; persentase pencapaian)</li>
+    <li>Total biaya operasional (perincian per kategori)</li>
+    <li>Total biaya bahan pertanian yang digunakan</li>
+    <li>Total pendapatan dari panen</li>
+    <li><strong>Laba/Rugi Bersih</strong> = Pendapatan − (Biaya Operasional + Biaya Bahan)</li>
+    <li>Grafik perbandingan antar musim tanam</li>
+  </ul>
+  Hanya dapat diakses oleh Administrator dan Manajer.
+</div>
+
+<div class="feature-card">
+  <h3>👥 3.10 Manajemen Pengguna</h3>
+  <p>Modul khusus Administrator untuk mengelola akun pengguna sistem.</p>
+  <strong>Fitur:</strong>
+  <ul>
+    <li>Membuat akun pengguna baru dengan peran tertentu</li>
+    <li>Mengubah peran pengguna (Administrator / Manager / Petugas Lapangan)</li>
+    <li>Reset password pengguna</li>
+    <li>Aktifkan / nonaktifkan akun</li>
+    <li>Sistem mencegah admin menonaktifkan akun dirinya sendiri (<em>self-lockout protection</em>)</li>
+  </ul>
+</div>
+
+<hr class="divider">
+
+<h1>4. Fitur Tambahan UI/UX</h1>
+<ul>
+  <li>🌙 <strong>Dual Theme (Light/Dark Mode)</strong> — dapat diganti kapan saja dari header atas</li>
+  <li>🔍 <strong>Pencarian &amp; Filter</strong> — tersedia di setiap halaman daftar data</li>
+  <li>📄 <strong>Pagination</strong> — data ditampilkan per halaman agar tidak memberatkan sistem</li>
+  <li>⏳ <strong>Loading State</strong> — indikator loading saat mengambil data dari database</li>
+  <li>📭 <strong>Empty State</strong> — pesan informatif ketika data kosong atau filter tidak menemukan hasil</li>
+  <li>❌ <strong>Error State</strong> — pesan error dengan tombol <em>Coba Lagi</em></li>
+  <li>✅ <strong>Toast Notification</strong> — notifikasi sukses/gagal setelah aksi</li>
+  <li>🗑️ <strong>Dialog Konfirmasi</strong> — konfirmasi sebelum menghapus data penting</li>
+</ul>
+
+<hr class="divider">
+
+<h1>5. Arsitektur &amp; Keamanan</h1>
+
+<h3>Pola Arsitektur MVVM</h3>
+<p>Aplikasi menggunakan pola <strong>Model-View-ViewModel (MVVM)</strong> secara murni — tidak ada kode bisnis di code-behind XAML. Semua logika ada di ViewModel dan Service layer.</p>
+
+<h3>Keamanan Password</h3>
+<p>Password disimpan menggunakan enkripsi <strong>PBKDF2</strong> dengan:</p>
+<ul>
+  <li>Salt kriptografis unik 16-byte per pengguna</li>
+  <li>100.000 iterasi SHA-256</li>
+  <li>Tidak ada plain-text password yang tersimpan di database</li>
+</ul>
+
+<h3>Keamanan Database</h3>
+<ul>
+  <li>Seluruh query menggunakan <strong>Parameterized Query</strong> — aman dari SQL Injection</li>
+  <li>Transaksi stok menggunakan <code>UPDLOCK</code> untuk mencegah race condition</li>
+  <li>Foreign key constraint mencegah penghapusan data yang masih direferensi</li>
+</ul>
+
+<hr class="divider">
+
+<h1>6. Struktur Database</h1>
+<p>Database <code>AgroTrackDb</code> terdiri dari <strong>11 tabel</strong>:</p>
+<table>
+  <tr><th>Tabel</th><th>Keterangan</th></tr>
+  <tr><td><code>Users</code></td><td>Data akun pengguna dan hak akses</td></tr>
+  <tr><td><code>Lands</code></td><td>Master data lahan pertanian</td></tr>
+  <tr><td><code>Commodities</code></td><td>Master data komoditas/tanaman</td></tr>
+  <tr><td><code>Plantings</code></td><td>Data musim tanam / siklus penanaman</td></tr>
+  <tr><td><code>FarmingActivities</code></td><td>Aktivitas lapangan per penanaman</td></tr>
+  <tr><td><code>AgriculturalMaterials</code></td><td>Master bahan pertanian &amp; stok</td></tr>
+  <tr><td><code>MaterialUsages</code></td><td>Pencatatan pemakaian bahan per aktivitas</td></tr>
+  <tr><td><code>OperationalCosts</code></td><td>Biaya operasional per penanaman</td></tr>
+  <tr><td><code>Harvests</code></td><td>Hasil panen bertahap per penanaman</td></tr>
+  <tr><td><code>AuditLogs</code></td><td>Log aksi penting dalam sistem</td></tr>
+  <tr><td><code>UserPreferences</code></td><td>Preferensi tampilan per pengguna (tema)</td></tr>
+</table>
+
+<hr class="divider">
+
+<p style="text-align:center; color:#666; font-size:0.9em; margin-top:32px;">
+  Laporan ini dibuat untuk keperluan dokumentasi ETS mata kuliah PBKK.<br>
+  <strong>AgroTrack</strong> — Kelompok 15 | Institut Teknologi Sepuluh Nopember (ITS) | 2026
+</p>

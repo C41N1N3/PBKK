@@ -1,0 +1,478 @@
+<UserControl x:Class="AgroTrack.Views.DashboardView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:viewmodels="clr-namespace:AgroTrack.ViewModels"
+             mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance Type=viewmodels:DashboardViewModel}"
+             d:DesignHeight="1100" d:DesignWidth="1200">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <Grid Margin="24">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/> <!-- 0. Header & Period Filter -->
+                <RowDefinition Height="Auto"/> <!-- 1. Operational Stat Cards -->
+                <RowDefinition Height="Auto"/> <!-- 2. Financial Highlight Cards -->
+                <RowDefinition Height="Auto"/> <!-- 3. Visual Charts Grid (Two Columns) -->
+            </Grid.RowDefinitions>
+
+            <!-- 0. Header & Controls -->
+            <Grid Grid.Row="0" Margin="0,0,0,24">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="Dashboard Manajemen Produksi" 
+                               FontSize="26" FontWeight="Bold" 
+                               Foreground="{DynamicResource BrushTextPrimary}"/>
+                    <TextBlock Text="Pantau kinerja lahan, realisasi produksi, efisiensi biaya, dan tren keuntungan pertanian." 
+                               FontSize="13" Margin="0,4,0,0"
+                               Foreground="{DynamicResource BrushTextSecondary}"/>
+                </StackPanel>
+
+                <!-- Period Filter & Refresh -->
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <ComboBox SelectedValue="{Binding SelectedPeriod, Mode=TwoWay}"
+                              Width="160"
+                              Style="{DynamicResource ModernComboBox}"
+                              Margin="0,0,10,0">
+                        <ComboBoxItem Content="Semua Waktu" IsSelected="True"/>
+                        <ComboBoxItem Content="Bulan Ini"/>
+                        <ComboBoxItem Content="3 Bulan Terakhir"/>
+                        <ComboBoxItem Content="Tahun Ini"/>
+                    </ComboBox>
+
+                    <Button Style="{DynamicResource PrimaryButton}"
+                            Command="{Binding RefreshCommand}"
+                            Padding="14,9">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="🔄" Margin="0,0,6,0"/>
+                            <TextBlock Text="Segarkan" FontWeight="SemiBold"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Grid>
+
+            <!-- 1. Operational Stat Cards (4 Cards) -->
+            <Grid Grid.Row="1" Margin="0,0,0,20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="16"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="16"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="16"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Card 1: Lahan Aktif -->
+                <Border Grid.Column="0" 
+                        Background="{DynamicResource BrushCardBackground}"
+                        BorderBrush="{DynamicResource BrushBorder}"
+                        BorderThickness="1"
+                        CornerRadius="10"
+                        Padding="18,16"
+                        Effect="{DynamicResource ShadowSmall}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="LAHAN AKTIF" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource BrushTextSecondary}"/>
+                            <TextBlock Text="{Binding Summary.TotalActiveLands}" FontSize="26" FontWeight="Bold" Foreground="{DynamicResource BrushTextPrimary}" Margin="0,4,0,2"/>
+                            <TextBlock Text="{Binding Summary.TotalLandAreaDisplay, StringFormat='Total luas {0}'}" FontSize="12" Foreground="{DynamicResource BrushPrimary}"/>
+                        </StackPanel>
+                        <TextBlock Grid.Column="1" Text="🏞️" FontSize="32" VerticalAlignment="Center" Opacity="0.8"/>
+                    </Grid>
+                </Border>
+
+                <!-- Card 2: Penanaman Aktif -->
+                <Border Grid.Column="2" 
+                        Background="{DynamicResource BrushCardBackground}"
+                        BorderBrush="{DynamicResource BrushBorder}"
+                        BorderThickness="1"
+                        CornerRadius="10"
+                        Padding="18,16"
+                        Effect="{DynamicResource ShadowSmall}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="PENANAMAN AKTIF" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource BrushTextSecondary}"/>
+                            <TextBlock Text="{Binding Summary.ActivePlantingsCount}" FontSize="26" FontWeight="Bold" Foreground="{DynamicResource BrushTextPrimary}" Margin="0,4,0,2"/>
+                            <TextBlock Text="Musim tanam berjalan" FontSize="12" Foreground="{DynamicResource BrushTextSecondary}"/>
+                        </StackPanel>
+                        <TextBlock Grid.Column="1" Text="🌱" FontSize="32" VerticalAlignment="Center" Opacity="0.8"/>
+                    </Grid>
+                </Border>
+
+                <!-- Card 3: Aktivitas Hari Ini -->
+                <Border Grid.Column="4" 
+                        Background="{DynamicResource BrushCardBackground}"
+                        BorderBrush="{DynamicResource BrushBorder}"
+                        BorderThickness="1"
+                        CornerRadius="10"
+                        Padding="18,16"
+                        Effect="{DynamicResource ShadowSmall}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="AKTIVITAS HARI INI" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource BrushTextSecondary}"/>
+                            <TextBlock Text="{Binding Summary.TodayActivitiesCount}" FontSize="26" FontWeight="Bold" Foreground="{DynamicResource BrushTextPrimary}" Margin="0,4,0,2"/>
+                            <TextBlock Text="Jadwal kerja lapangan" FontSize="12" Foreground="{DynamicResource BrushTextSecondary}"/>
+                        </StackPanel>
+                        <TextBlock Grid.Column="1" Text="📅" FontSize="32" VerticalAlignment="Center" Opacity="0.8"/>
+                    </Grid>
+                </Border>
+
+                <!-- Card 4: Bahan Stok Menipis -->
+                <Border Grid.Column="6" 
+                        Background="{DynamicResource BrushCardBackground}"
+                        BorderBrush="{DynamicResource BrushBorder}"
+                        BorderThickness="1"
+                        CornerRadius="10"
+                        Padding="18,16"
+                        Effect="{DynamicResource ShadowSmall}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="STOK BAHAN MENIPIS" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource BrushTextSecondary}"/>
+                            <TextBlock Text="{Binding Summary.LowStockMaterialsCount}" FontSize="26" FontWeight="Bold" 
+                                       Foreground="{DynamicResource BrushWarning}" Margin="0,4,0,2"/>
+                            <TextBlock Text="Di bawah batas minimum" FontSize="12" Foreground="{DynamicResource BrushTextSecondary}"/>
+                        </StackPanel>
+                        <TextBlock Grid.Column="1" Text="⚠️" FontSize="32" VerticalAlignment="Center" Opacity="0.8"/>
+                    </Grid>
+                </Border>
+            </Grid>
+
+            <!-- 2. Financial Highlight Cards (4 Cards) -->
+            <Grid Grid.Row="2" Margin="0,0,0,24">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="16"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="16"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="16"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Card 1: Total Hasil Panen -->
+                <Border Grid.Column="0" 
+                        Background="{DynamicResource BrushCardBackground}"
+                        BorderBrush="{DynamicResource BrushBorder}"
+                        BorderThickness="1"
+                        CornerRadius="10"
+                        Padding="18,16"
+                        Effect="{DynamicResource ShadowSmall}">
+                    <StackPanel>
+                        <TextBlock Text="TOTAL HASIL PANEN" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource BrushTextSecondary}"/>
+                        <TextBlock Text="{Binding Summary.TotalHarvestYieldDisplay}" FontSize="20" FontWeight="Bold" Foreground="{DynamicResource BrushTextPrimary}" Margin="0,6,0,2"/>
+                        <TextBlock Text="Realisasi produksi" FontSize="12" Foreground="{DynamicResource BrushTextSecondary}"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Card 2: Total Biaya Operasional -->
+                <Border Grid.Column="2" 
+                        Background="{DynamicResource BrushCardBackground}"
+                        BorderBrush="{DynamicResource BrushBorder}"
+                        BorderThickness="1"
+                        CornerRadius="10"
+                        Padding="18,16"
+                        Effect="{DynamicResource ShadowSmall}">
+                    <StackPanel>
+                        <TextBlock Text="TOTAL BIAYA OPERASIONAL" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource BrushTextSecondary}"/>
+                        <TextBlock Text="{Binding Summary.TotalOperationalCostDisplay}" FontSize="20" FontWeight="Bold" Foreground="{DynamicResource BrushTextPrimary}" Margin="0,6,0,2"/>
+                        <TextBlock Text="Pengeluaran budidaya" FontSize="12" Foreground="{DynamicResource BrushTextSecondary}"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Card 3: Total Pendapatan -->
+                <Border Grid.Column="4" 
+                        Background="{DynamicResource BrushCardBackground}"
+                        BorderBrush="{DynamicResource BrushBorder}"
+                        BorderThickness="1"
+                        CornerRadius="10"
+                        Padding="18,16"
+                        Effect="{DynamicResource ShadowSmall}">
+                    <StackPanel>
+                        <TextBlock Text="TOTAL PENDAPATAN" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource BrushTextSecondary}"/>
+                        <TextBlock Text="{Binding Summary.TotalRevenueDisplay}" FontSize="20" FontWeight="Bold" Foreground="{DynamicResource BrushSuccess}" Margin="0,6,0,2"/>
+                        <TextBlock Text="Penjualan komoditas" FontSize="12" Foreground="{DynamicResource BrushTextSecondary}"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Card 4: Estimasi Keuntungan Bersih -->
+                <Border Grid.Column="6" 
+                        Background="{DynamicResource BrushCardBackground}"
+                        BorderBrush="{DynamicResource BrushBorder}"
+                        BorderThickness="1"
+                        CornerRadius="10"
+                        Padding="18,16"
+                        Effect="{DynamicResource ShadowSmall}">
+                    <StackPanel>
+                        <TextBlock Text="ESTIMASI LABA BERSIH" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource BrushTextSecondary}"/>
+                        <TextBlock Text="{Binding Summary.EstimatedNetProfitDisplay}" FontSize="20" FontWeight="Bold" 
+                                   Foreground="{DynamicResource BrushPrimary}" Margin="0,6,0,2"/>
+                        <TextBlock Text="Pendapatan - Biaya" FontSize="12" Foreground="{DynamicResource BrushTextSecondary}"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <!-- 3. Visual Charts & Analytics Grid (2 Columns) -->
+            <Grid Grid.Row="3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1.2*"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- LEFT COLUMN -->
+                <StackPanel Grid.Column="0">
+                    <!-- Target vs Actual Visual Chart -->
+                    <Border Background="{DynamicResource BrushCardBackground}"
+                            BorderBrush="{DynamicResource BrushBorder}"
+                            BorderThickness="1"
+                            CornerRadius="10"
+                            Padding="20"
+                            Margin="0,0,0,20"
+                            Effect="{DynamicResource ShadowSmall}">
+                        <StackPanel>
+                            <Grid Margin="0,0,0,16">
+                                <TextBlock Text="Target vs Realisasi Panen per Musim" 
+                                           FontSize="16" FontWeight="Bold" 
+                                           Foreground="{DynamicResource BrushTextPrimary}"/>
+                                <TextBlock Text="Persentase Pencapaian" FontSize="12" 
+                                           Foreground="{DynamicResource BrushTextSecondary}" 
+                                           HorizontalAlignment="Right"/>
+                            </Grid>
+
+                            <!-- Target vs Actual ItemsControl -->
+                            <ItemsControl ItemsSource="{Binding TargetVsActuals}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Margin="0,0,0,14">
+                                            <Grid>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="Auto"/>
+                                                </Grid.RowDefinitions>
+
+                                                <Grid Grid.Row="0" Margin="0,0,0,4">
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Text="{Binding PlantingCode}" FontWeight="Bold" Foreground="{DynamicResource BrushPrimary}"/>
+                                                        <TextBlock Text=" - " Foreground="{DynamicResource BrushTextSecondary}"/>
+                                                        <TextBlock Text="{Binding CommodityName}" FontWeight="SemiBold"/>
+                                                        <TextBlock Text="{Binding SeasonName, StringFormat=' ({0})'}" FontSize="12" Foreground="{DynamicResource BrushTextSecondary}"/>
+                                                    </StackPanel>
+
+                                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                                        <TextBlock Text="{Binding ActualDisplay}" FontWeight="Bold" Foreground="{DynamicResource BrushTextPrimary}"/>
+                                                        <TextBlock Text=" / " Foreground="{DynamicResource BrushTextSecondary}"/>
+                                                        <TextBlock Text="{Binding TargetDisplay}" Foreground="{DynamicResource BrushTextSecondary}"/>
+                                                        <TextBlock Text="{Binding PercentageDisplay, StringFormat=' ({0})'}" FontWeight="Bold" Foreground="{DynamicResource BrushSuccess}" Margin="4,0,0,0"/>
+                                                    </StackPanel>
+                                                </Grid>
+
+                                                <!-- Visual Progress Bar -->
+                                                <ProgressBar Grid.Row="1" 
+                                                             Value="{Binding TargetPercentage, Mode=OneWay}" 
+                                                             Maximum="100" 
+                                                             Height="10"
+                                                             Foreground="{DynamicResource BrushPrimary}"
+                                                             Background="{DynamicResource BrushBorder}"/>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Monthly Harvest Trends Vector Visual -->
+                    <Border Background="{DynamicResource BrushCardBackground}"
+                            BorderBrush="{DynamicResource BrushBorder}"
+                            BorderThickness="1"
+                            CornerRadius="10"
+                            Padding="20"
+                            Effect="{DynamicResource ShadowSmall}">
+                        <StackPanel>
+                            <TextBlock Text="Tren Panen Bulanan" 
+                                       FontSize="16" FontWeight="Bold" 
+                                       Foreground="{DynamicResource BrushTextPrimary}" 
+                                       Margin="0,0,0,16"/>
+
+                            <ItemsControl ItemsSource="{Binding MonthlyTrends}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <UniformGrid Rows="1" Height="140"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid VerticalAlignment="Bottom" Margin="6,0">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="*"/>
+                                                <RowDefinition Height="Auto"/>
+                                            </Grid.RowDefinitions>
+
+                                            <!-- Bar Column Container -->
+                                            <Border Grid.Row="0" 
+                                                    VerticalAlignment="Bottom"
+                                                    Height="{Binding BarHeightPercentage, Mode=OneWay}"
+                                                    Background="{DynamicResource BrushPrimary}"
+                                                    CornerRadius="4,4,0,0"
+                                                    ToolTip="{Binding RevenueDisplay, StringFormat='Pendapatan: {0}'}"/>
+
+                                            <!-- Label -->
+                                            <StackPanel Grid.Row="1" Margin="0,8,0,0" HorizontalAlignment="Center">
+                                                <TextBlock Text="{Binding MonthLabel}" FontSize="11" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+                                                <TextBlock Text="{Binding YieldDisplay}" FontSize="10" Foreground="{DynamicResource BrushTextSecondary}" HorizontalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+
+                <!-- RIGHT COLUMN -->
+                <StackPanel Grid.Column="2">
+                    <!-- Upcoming Harvests Alert -->
+                    <Border Background="{DynamicResource BrushCardBackground}"
+                            BorderBrush="{DynamicResource BrushBorder}"
+                            BorderThickness="1"
+                            CornerRadius="10"
+                            Padding="20"
+                            Margin="0,0,0,20"
+                            Effect="{DynamicResource ShadowSmall}">
+                        <StackPanel>
+                            <TextBlock Text="Penanaman Mendekati Panen" 
+                                       FontSize="16" FontWeight="Bold" 
+                                       Foreground="{DynamicResource BrushTextPrimary}" 
+                                       Margin="0,0,0,14"/>
+
+                            <ItemsControl ItemsSource="{Binding UpcomingHarvests}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Padding="10,8" Margin="0,0,0,8" 
+                                                Background="{DynamicResource BrushSidebarActive}"
+                                                BorderBrush="{DynamicResource BrushBorder}"
+                                                BorderThickness="1"
+                                                CornerRadius="6">
+                                            <Grid>
+                                                <StackPanel>
+                                                    <TextBlock Text="{Binding CommodityName}" FontWeight="Bold"/>
+                                                    <TextBlock Text="{Binding PlantingCode, StringFormat='Kode: {0}'}" FontSize="11" Foreground="{DynamicResource BrushTextSecondary}"/>
+                                                    <TextBlock Text="{Binding LandName, StringFormat='Lahan: {0}'}" FontSize="11" Foreground="{DynamicResource BrushTextSecondary}"/>
+                                                </StackPanel>
+
+                                                <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center">
+                                                    <Border CornerRadius="4" Padding="6,2" HorizontalAlignment="Right" Background="{DynamicResource BrushWarning}">
+                                                        <TextBlock Text="{Binding DaysRemainingDisplay}" FontSize="11" FontWeight="Bold" Foreground="White"/>
+                                                    </Border>
+                                                    <TextBlock Text="{Binding ExpectedDateDisplay}" FontSize="11" Foreground="{DynamicResource BrushTextSecondary}" HorizontalAlignment="Right" Margin="0,4,0,0"/>
+                                                </StackPanel>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Cost by Category Distribution -->
+                    <Border Background="{DynamicResource BrushCardBackground}"
+                            BorderBrush="{DynamicResource BrushBorder}"
+                            BorderThickness="1"
+                            CornerRadius="10"
+                            Padding="20"
+                            Margin="0,0,0,20"
+                            Effect="{DynamicResource ShadowSmall}">
+                        <StackPanel>
+                            <TextBlock Text="Distribusi Biaya per Kategori" 
+                                       FontSize="16" FontWeight="Bold" 
+                                       Foreground="{DynamicResource BrushTextPrimary}" 
+                                       Margin="0,0,0,14"/>
+
+                            <ItemsControl ItemsSource="{Binding CategoryCosts}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Margin="0,0,0,10">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                            </Grid.RowDefinitions>
+
+                                            <Grid Grid.Row="0" Margin="0,0,0,4">
+                                                <TextBlock Text="{Binding CategoryName}" FontWeight="SemiBold"/>
+                                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                                    <TextBlock Text="{Binding AmountDisplay}" FontWeight="Bold"/>
+                                                    <TextBlock Text="{Binding PercentageDisplay, StringFormat=' ({0})'}" Foreground="{DynamicResource BrushTextSecondary}" Margin="4,0,0,0"/>
+                                                </StackPanel>
+                                            </Grid>
+
+                                            <ProgressBar Grid.Row="1" Value="{Binding PercentageOfTotal, Mode=OneWay}" Maximum="100" Height="6"
+                                                         Foreground="{DynamicResource BrushWarning}" Background="{DynamicResource BrushBorder}"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Recent Activities List -->
+                    <Border Background="{DynamicResource BrushCardBackground}"
+                            BorderBrush="{DynamicResource BrushBorder}"
+                            BorderThickness="1"
+                            CornerRadius="10"
+                            Padding="20"
+                            Effect="{DynamicResource ShadowSmall}">
+                        <StackPanel>
+                            <TextBlock Text="Aktivitas Lapangan Terbaru" 
+                                       FontSize="16" FontWeight="Bold" 
+                                       Foreground="{DynamicResource BrushTextPrimary}" 
+                                       Margin="0,0,0,14"/>
+
+                            <ItemsControl ItemsSource="{Binding RecentActivities}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Padding="10,8" Margin="0,0,0,8" 
+                                                BorderBrush="{DynamicResource BrushBorder}"
+                                                BorderThickness="0,0,0,1">
+                                            <Grid>
+                                                <StackPanel>
+                                                    <TextBlock Text="{Binding ActivityTypeDisplay}" FontWeight="Bold"/>
+                                                    <TextBlock Text="{Binding Description}" FontSize="12" Foreground="{DynamicResource BrushTextSecondary}" TextTrimming="CharacterEllipsis" MaxWidth="260"/>
+                                                    <TextBlock Text="{Binding OfficerName, StringFormat='Petugas: {0}'}" FontSize="11" Foreground="{DynamicResource BrushTextSecondary}"/>
+                                                </StackPanel>
+                                                <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center">
+                                                    <TextBlock Text="{Binding ActivityDateDisplay}" FontSize="11" FontWeight="SemiBold" HorizontalAlignment="Right"/>
+                                                    <TextBlock Text="{Binding StatusDisplay}" FontSize="11" Foreground="{DynamicResource BrushPrimary}" HorizontalAlignment="Right"/>
+                                                </StackPanel>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

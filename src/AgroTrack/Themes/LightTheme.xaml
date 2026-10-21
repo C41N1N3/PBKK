@@ -1,0 +1,66 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Primary Palette (Forest Green) -->
+    <Color x:Key="PrimaryColor">#2E7D32</Color>
+    <Color x:Key="PrimaryDarkColor">#1B5E20</Color>
+    <Color x:Key="PrimaryLightColor">#E8F5E9</Color>
+    <Color x:Key="AccentColor">#F57F17</Color>
+
+    <!-- Neutral Palette -->
+    <Color x:Key="BackgroundColor">#F4F7F4</Color>
+    <Color x:Key="SurfaceColor">#FFFFFF</Color>
+    <Color x:Key="SurfaceElevatedColor">#FFFFFF</Color>
+    <Color x:Key="BorderColor">#DCE4DD</Color>
+    <Color x:Key="SidebarBackgroundColor">#1B3825</Color>
+    <Color x:Key="SidebarHoverColor">#285237</Color>
+    <Color x:Key="SidebarSelectedColor">#2E7D32</Color>
+
+    <!-- Typography -->
+    <Color x:Key="TextPrimaryColor">#1A251D</Color>
+    <Color x:Key="TextSecondaryColor">#5C6E61</Color>
+    <Color x:Key="TextMutedColor">#8B9B8F</Color>
+    <Color x:Key="TextOnPrimaryColor">#FFFFFF</Color>
+
+    <!-- Semantic Status Colors -->
+    <Color x:Key="SuccessColor">#2E7D32</Color>
+    <Color x:Key="WarningColor">#ED6C02</Color>
+    <Color x:Key="DangerColor">#D32F2F</Color>
+    <Color x:Key="InfoColor">#0288D1</Color>
+
+    <!-- SolidColorBrushes -->
+    <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource PrimaryColor}" />
+    <SolidColorBrush x:Key="PrimaryDarkBrush" Color="{StaticResource PrimaryDarkColor}" />
+    <SolidColorBrush x:Key="PrimaryLightBrush" Color="{StaticResource PrimaryLightColor}" />
+    <SolidColorBrush x:Key="AccentBrush" Color="{StaticResource AccentColor}" />
+
+    <SolidColorBrush x:Key="BackgroundBrush" Color="{StaticResource BackgroundColor}" />
+    <SolidColorBrush x:Key="SurfaceBrush" Color="{StaticResource SurfaceColor}" />
+    <SolidColorBrush x:Key="SurfaceElevatedBrush" Color="{StaticResource SurfaceElevatedColor}" />
+    <SolidColorBrush x:Key="BorderBrush" Color="{StaticResource BorderColor}" />
+    <SolidColorBrush x:Key="SidebarBackgroundBrush" Color="{StaticResource SidebarBackgroundColor}" />
+    <SolidColorBrush x:Key="SidebarHoverBrush" Color="{StaticResource SidebarHoverColor}" />
+    <SolidColorBrush x:Key="SidebarSelectedBrush" Color="{StaticResource SidebarSelectedColor}" />
+
+    <SolidColorBrush x:Key="TextPrimaryBrush" Color="{StaticResource TextPrimaryColor}" />
+    <SolidColorBrush x:Key="TextSecondaryBrush" Color="{StaticResource TextSecondaryColor}" />
+    <SolidColorBrush x:Key="TextMutedBrush" Color="{StaticResource TextMutedColor}" />
+    <SolidColorBrush x:Key="TextOnPrimaryBrush" Color="{StaticResource TextOnPrimaryColor}" />
+
+    <SolidColorBrush x:Key="SuccessBrush" Color="{StaticResource SuccessColor}" />
+    <SolidColorBrush x:Key="WarningBrush" Color="{StaticResource WarningColor}" />
+    <SolidColorBrush x:Key="DangerBrush" Color="{StaticResource DangerColor}" />
+    <SolidColorBrush x:Key="InfoBrush" Color="{StaticResource InfoColor}" />
+
+    <!-- Compatibility Brush Aliases -->
+    <SolidColorBrush x:Key="BrushTextPrimary" Color="{StaticResource TextPrimaryColor}" />
+    <SolidColorBrush x:Key="BrushTextSecondary" Color="{StaticResource TextSecondaryColor}" />
+    <SolidColorBrush x:Key="BrushCardBackground" Color="{StaticResource SurfaceColor}" />
+    <SolidColorBrush x:Key="CardBrush" Color="{StaticResource SurfaceColor}" />
+    <SolidColorBrush x:Key="BrushBorder" Color="{StaticResource BorderColor}" />
+    <SolidColorBrush x:Key="BrushPrimary" Color="{StaticResource PrimaryColor}" />
+    <SolidColorBrush x:Key="BrushSuccess" Color="{StaticResource SuccessColor}" />
+    <SolidColorBrush x:Key="BrushWarning" Color="{StaticResource WarningColor}" />
+    <SolidColorBrush x:Key="BrushSidebarActive" Color="{StaticResource SidebarSelectedColor}" />
+
+</ResourceDictionary>

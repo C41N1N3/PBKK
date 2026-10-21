@@ -1,0 +1,311 @@
+<UserControl x:Class="AgroTrack.Views.LoginView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             d:DesignHeight="650" d:DesignWidth="1000"
+             Background="{DynamicResource BackgroundBrush}">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="420" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!-- ===== KIRI: Panel Info AgroTrack ===== -->
+        <Border Grid.Column="0" Background="#1B3825">
+            <Grid>
+                <!-- Dekorasi lingkaran -->
+                <Canvas IsHitTestVisible="False">
+                    <Ellipse Width="300" Height="300" Fill="#2E5C38" Opacity="0.35"
+                             Canvas.Left="-100" Canvas.Top="-80"/>
+                    <Ellipse Width="200" Height="200" Fill="#3A7D44" Opacity="0.2"
+                             Canvas.Right="-60" Canvas.Bottom="40"/>
+                </Canvas>
+
+                <StackPanel VerticalAlignment="Center" Margin="44,0,36,0">
+
+                    <!-- Logo + Nama -->
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,28">
+                        <Border Width="52" Height="52" CornerRadius="14" Background="#3A7D44" Margin="0,0,14,0">
+                            <!-- Logo pertanian: padi + daun SVG path -->
+                            <Canvas Width="30" Height="30" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <!-- Batang utama -->
+                                <Rectangle Canvas.Left="13.5" Canvas.Top="8" Width="3" Height="18"
+                                           Fill="#A8E6B0" RadiusX="1.5" RadiusY="1.5"/>
+                                <!-- Butir padi kiri atas -->
+                                <Ellipse Canvas.Left="5" Canvas.Top="8" Width="9" Height="6"
+                                         Fill="#C8F0C8">
+                                    <Ellipse.RenderTransform>
+                                        <RotateTransform Angle="-30" CenterX="9" CenterY="11"/>
+                                    </Ellipse.RenderTransform>
+                                </Ellipse>
+                                <!-- Butir padi kanan atas -->
+                                <Ellipse Canvas.Left="16" Canvas.Top="8" Width="9" Height="6"
+                                         Fill="#C8F0C8">
+                                    <Ellipse.RenderTransform>
+                                        <RotateTransform Angle="30" CenterX="20" CenterY="11"/>
+                                    </Ellipse.RenderTransform>
+                                </Ellipse>
+                                <!-- Butir padi kiri tengah -->
+                                <Ellipse Canvas.Left="4" Canvas.Top="14" Width="9" Height="6"
+                                         Fill="#A8E6B0">
+                                    <Ellipse.RenderTransform>
+                                        <RotateTransform Angle="-25" CenterX="8" CenterY="17"/>
+                                    </Ellipse.RenderTransform>
+                                </Ellipse>
+                                <!-- Butir padi kanan tengah -->
+                                <Ellipse Canvas.Left="17" Canvas.Top="14" Width="9" Height="6"
+                                         Fill="#A8E6B0">
+                                    <Ellipse.RenderTransform>
+                                        <RotateTransform Angle="25" CenterX="21" CenterY="17"/>
+                                    </Ellipse.RenderTransform>
+                                </Ellipse>
+                                <!-- Pucuk atas -->
+                                <Ellipse Canvas.Left="11" Canvas.Top="4" Width="8" Height="5"
+                                         Fill="#D4F5D4"/>
+                                <!-- Akar / tanah -->
+                                <Rectangle Canvas.Left="4" Canvas.Top="26" Width="22" Height="3"
+                                           Fill="#7DB887" RadiusX="1.5" RadiusY="1.5"/>
+                            </Canvas>
+                        </Border>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="AgroTrack" FontSize="22" FontWeight="Bold" Foreground="#FFFFFF"/>
+                            <TextBlock Text="v1.0 — ETS PBKK 2026" FontSize="11" Foreground="#7DB887"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <!-- Tagline -->
+                    <TextBlock Text="Sistem Informasi Manajemen&#x0A;Produksi Pertanian"
+                               FontSize="24" FontWeight="Bold" Foreground="#FFFFFF"
+                               LineHeight="32" Margin="0,0,0,12"/>
+                    <TextBlock Text="Platform terintegrasi untuk memantau lahan, musim tanam, aktivitas lapangan, stok bahan, hingga laporan keuangan pertanian secara real-time."
+                               FontSize="13" Foreground="#A8C8B0" TextWrapping="Wrap"
+                               LineHeight="20" Margin="0,0,0,32"/>
+
+                    <!-- Feature list -->
+                    <StackPanel Margin="0,0,0,36">
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,14">
+                            <Border Width="32" Height="32" CornerRadius="8" Background="#2E5C38" Margin="0,0,12,0">
+                                <TextBlock Text="◫" FontSize="14" Foreground="#7DB887"
+                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="Manajemen Lahan &amp; Musim Tanam" FontSize="13"
+                                           FontWeight="SemiBold" Foreground="#FFFFFF"/>
+                                <TextBlock Text="Pantau status dan kapasitas setiap lahan" FontSize="11" Foreground="#7DB887"/>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,14">
+                            <Border Width="32" Height="32" CornerRadius="8" Background="#2E5C38" Margin="0,0,12,0">
+                                <TextBlock Text="▦" FontSize="14" Foreground="#7DB887"
+                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="Aktivitas &amp; Stok Bahan" FontSize="13"
+                                           FontWeight="SemiBold" Foreground="#FFFFFF"/>
+                                <TextBlock Text="Catat penggunaan pupuk, pestisida, dan alat" FontSize="11" Foreground="#7DB887"/>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,14">
+                            <Border Width="32" Height="32" CornerRadius="8" Background="#2E5C38" Margin="0,0,12,0">
+                                <TextBlock Text="▲" FontSize="12" Foreground="#7DB887"
+                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="Laporan Laba Rugi &amp; Panen" FontSize="13"
+                                           FontWeight="SemiBold" Foreground="#FFFFFF"/>
+                                <TextBlock Text="Analisis profitabilitas per musim tanam" FontSize="11" Foreground="#7DB887"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <!-- Avatar / ilustrasi pengguna -->
+                    <Border Background="#14281A" CornerRadius="12" Padding="16,14">
+                        <StackPanel Orientation="Horizontal">
+                            <Grid Margin="0,0,14,0">
+                                <!-- Avatar utama -->
+                                <Border Width="42" Height="42" CornerRadius="21" Background="#3A7D44">
+                                    <TextBlock Text="H" FontSize="18" FontWeight="Bold" Foreground="White"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <!-- Avatar kedua (overlap) -->
+                                <Border Width="42" Height="42" CornerRadius="21" Background="#2E5C38"
+                                        Margin="24,0,0,0" BorderBrush="#14281A" BorderThickness="2">
+                                    <TextBlock Text="B" FontSize="18" FontWeight="Bold" Foreground="White"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <!-- Avatar ketiga (overlap) -->
+                                <Border Width="42" Height="42" CornerRadius="21" Background="#4CAF50"
+                                        Margin="48,0,0,0" BorderBrush="#14281A" BorderThickness="2">
+                                    <TextBlock Text="A" FontSize="18" FontWeight="Bold" Foreground="White"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </Grid>
+                            <StackPanel VerticalAlignment="Center" Margin="56,0,0,0">
+                                <TextBlock Text="Digunakan oleh tim pertanian" FontSize="12"
+                                           FontWeight="SemiBold" Foreground="#FFFFFF"/>
+                                <TextBlock Text="Admin · Manajer · Petugas Lapangan" FontSize="11" Foreground="#7DB887"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- ===== KANAN: Form Login ===== -->
+        <Border Grid.Column="1" Background="#F0F7F0">
+            <Grid>
+                <!-- Dekorasi tanaman pojok kanan atas -->
+                <Canvas IsHitTestVisible="False" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+
+                    <!-- POJOK KANAN ATAS: daun besar -->
+                    <Path Canvas.Right="0" Canvas.Top="0"
+                          Fill="#C8E6C9" Opacity="0.7"
+                          Data="M 160,0 Q 120,40 140,90 Q 100,60 80,20 Q 110,10 160,0 Z"/>
+                    <Path Canvas.Right="0" Canvas.Top="0"
+                          Fill="#A5D6A7" Opacity="0.5"
+                          Data="M 200,0 Q 150,50 170,110 Q 120,70 100,20 Q 150,5 200,0 Z"/>
+                    <Path Canvas.Right="0" Canvas.Top="0"
+                          Fill="#81C784" Opacity="0.35"
+                          Data="M 240,0 Q 180,60 200,130 Q 140,80 120,20 Q 180,0 240,0 Z"/>
+
+                    <!-- Batang pojok kanan atas -->
+                    <Rectangle Canvas.Right="18" Canvas.Top="0" Width="4" Height="80"
+                               Fill="#A5D6A7" Opacity="0.6" RadiusX="2" RadiusY="2">
+                        <Rectangle.RenderTransform>
+                            <RotateTransform Angle="15" CenterX="2" CenterY="0"/>
+                        </Rectangle.RenderTransform>
+                    </Rectangle>
+
+                    <!-- POJOK KIRI BAWAH: semak daun -->
+                    <Path Canvas.Left="0" Canvas.Bottom="0"
+                          Fill="#C8E6C9" Opacity="0.65"
+                          Data="M 0,120 Q 50,80 40,30 Q 80,60 60,110 Q 40,130 0,120 Z"/>
+                    <Path Canvas.Left="0" Canvas.Bottom="0"
+                          Fill="#A5D6A7" Opacity="0.5"
+                          Data="M 0,160 Q 70,110 60,50 Q 110,90 80,150 Q 50,170 0,160 Z"/>
+                    <Path Canvas.Left="0" Canvas.Bottom="0"
+                          Fill="#81C784" Opacity="0.3"
+                          Data="M 0,200 Q 90,140 80,70 Q 140,120 100,190 Q 60,210 0,200 Z"/>
+
+                    <!-- Rumput kecil kiri bawah -->
+                    <Rectangle Canvas.Left="30" Canvas.Bottom="0" Width="3" Height="50"
+                               Fill="#81C784" Opacity="0.5" RadiusX="1.5" RadiusY="1.5">
+                        <Rectangle.RenderTransform>
+                            <RotateTransform Angle="-10" CenterX="1.5" CenterY="50"/>
+                        </Rectangle.RenderTransform>
+                    </Rectangle>
+                    <Rectangle Canvas.Left="50" Canvas.Bottom="0" Width="3" Height="40"
+                               Fill="#A5D6A7" Opacity="0.5" RadiusX="1.5" RadiusY="1.5">
+                        <Rectangle.RenderTransform>
+                            <RotateTransform Angle="8" CenterX="1.5" CenterY="40"/>
+                        </Rectangle.RenderTransform>
+                    </Rectangle>
+                    <Rectangle Canvas.Left="68" Canvas.Bottom="0" Width="3" Height="55"
+                               Fill="#81C784" Opacity="0.4" RadiusX="1.5" RadiusY="1.5">
+                        <Rectangle.RenderTransform>
+                            <RotateTransform Angle="-5" CenterX="1.5" CenterY="55"/>
+                        </Rectangle.RenderTransform>
+                    </Rectangle>
+
+                    <!-- POJOK KANAN BAWAH: daun kecil -->
+                    <Path Canvas.Right="0" Canvas.Bottom="0"
+                          Fill="#C8E6C9" Opacity="0.55"
+                          Data="M 100,80 Q 60,50 70,10 Q 100,30 110,70 Q 110,80 100,80 Z"/>
+                    <Path Canvas.Right="0" Canvas.Bottom="0"
+                          Fill="#A5D6A7" Opacity="0.4"
+                          Data="M 130,110 Q 80,70 90,20 Q 130,50 140,100 Q 138,110 130,110 Z"/>
+
+                    <!-- Titik-titik dekoratif (biji/bunga kecil) -->
+                    <Ellipse Canvas.Right="80" Canvas.Top="120" Width="6" Height="6" Fill="#81C784" Opacity="0.4"/>
+                    <Ellipse Canvas.Right="60" Canvas.Top="145" Width="4" Height="4" Fill="#A5D6A7" Opacity="0.35"/>
+                    <Ellipse Canvas.Left="120" Canvas.Bottom="80" Width="5" Height="5" Fill="#81C784" Opacity="0.35"/>
+                    <Ellipse Canvas.Left="100" Canvas.Bottom="60" Width="4" Height="4" Fill="#A5D6A7" Opacity="0.3"/>
+
+                </Canvas>
+
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Width="360">
+
+                    <!-- Header -->
+                    <TextBlock Text="Selamat Datang" FontSize="26" FontWeight="Bold"
+                               Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,0,0,6"/>
+                    <TextBlock Text="Masuk ke akun AgroTrack Anda" FontSize="13"
+                               Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,0,32"/>
+
+                    <!-- Error Banner -->
+                    <Border Background="#FFEBEE" BorderBrush="{DynamicResource DangerBrush}" BorderThickness="1"
+                            CornerRadius="8" Padding="12,10" Margin="0,0,0,20"
+                            Visibility="{Binding HasError, Converter={StaticResource BoolToVisConverter}}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="!" FontSize="14" FontWeight="Bold" Foreground="{DynamicResource DangerBrush}"
+                                       Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding ErrorMessage}" Foreground="{DynamicResource DangerBrush}"
+                                       TextWrapping="Wrap" FontSize="12" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Username -->
+                    <TextBlock Text="Username" FontWeight="SemiBold" FontSize="13" Margin="0,0,0,6"
+                               Foreground="{DynamicResource TextPrimaryBrush}"/>
+                    <TextBox x:Name="UsernameBox" Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="0,0,0,18" Height="40" VerticalContentAlignment="Center"
+                             Padding="10,0" FontSize="13"/>
+
+                    <!-- Password -->
+                    <TextBlock Text="Password" FontWeight="SemiBold" FontSize="13" Margin="0,0,0,6"
+                               Foreground="{DynamicResource TextPrimaryBrush}"/>
+                    <PasswordBox x:Name="PasswordBox" PasswordChanged="PasswordBox_PasswordChanged"
+                                 Margin="0,0,0,24" Height="40" VerticalContentAlignment="Center"
+                                 Padding="10,0" FontSize="13"/>
+
+                    <!-- Login Button -->
+                    <Button Command="{Binding LoginCommand}" Height="44"
+                            Style="{StaticResource PrimaryButton}" Margin="0,0,0,24">
+                        <Grid>
+                            <TextBlock Text="Masuk ke Sistem" FontSize="14" FontWeight="SemiBold"
+                                       Visibility="{Binding IsLoading, Converter={StaticResource InverseBoolToVisConverter}}"/>
+                            <TextBlock Text="Memeriksa kredensial..." FontSize="13"
+                                       Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisConverter}}"/>
+                        </Grid>
+                    </Button>
+
+                    <!-- Separator -->
+                    <Grid Margin="0,0,0,20">
+                        <Separator Background="{DynamicResource BorderBrush}"/>
+                        <Border Background="{DynamicResource BackgroundBrush}" HorizontalAlignment="Center" Padding="10,0">
+                            <TextBlock Text="Akun Demo" FontSize="11" Foreground="{DynamicResource TextMutedBrush}"/>
+                        </Border>
+                    </Grid>
+
+                    <!-- Demo Buttons -->
+                    <UniformGrid Columns="3">
+                        <Button Content="Admin" Style="{StaticResource SecondaryButton}" Margin="0,0,6,0"
+                                FontSize="12" Padding="0,8"
+                                Command="{Binding SetDemoUserCommand}" CommandParameter="admin"
+                                Click="DemoButton_Click"/>
+                        <Button Content="Manajer" Style="{StaticResource SecondaryButton}" Margin="3,0"
+                                FontSize="12" Padding="0,8"
+                                Command="{Binding SetDemoUserCommand}" CommandParameter="manager"
+                                Click="DemoButton_Click"/>
+                        <Button Content="Petugas" Style="{StaticResource SecondaryButton}" Margin="6,0,0,0"
+                                FontSize="12" Padding="0,8"
+                                Command="{Binding SetDemoUserCommand}" CommandParameter="petugas"
+                                Click="DemoButton_Click"/>
+                    </UniformGrid>
+
+                    <!-- Footer -->
+                    <TextBlock Text="Kelompok 15 — PBKK ITS 2026" FontSize="11"
+                               Foreground="{DynamicResource TextMutedBrush}"
+                               HorizontalAlignment="Center" Margin="0,28,0,0"/>
+
+                </StackPanel>
+            </Grid>
+        </Border>
+
+    </Grid>
+</UserControl>
